@@ -38,7 +38,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 
         public IEventGridWebhookBuilder AddViewerHubContext(string httpRoute = "/hubs/gridevents")
         {
-            Services.AddSignalR();
+            //Services.AddSignalR();
 
             Services.Configure<EventGridWebhooksOptions>(options =>
             {

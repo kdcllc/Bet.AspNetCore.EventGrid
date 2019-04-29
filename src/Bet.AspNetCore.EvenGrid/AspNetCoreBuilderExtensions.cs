@@ -1,5 +1,6 @@
 ﻿using Bet.AspNetCore.EvenGrid.Webhooks;
 
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -20,9 +21,20 @@ namespace Microsoft.AspNetCore.Builder
             {
                 if (options.ViewerHubContextEnabled)
                 {
-                    app.UseSignalR(routes =>
+                    app.UseStaticFiles();
+
+                    app.UseWebSockets();
+
+                    app.UseSignalR((configure) =>
                     {
-                        routes.MapHub<GridEventsHub>(options.ViewerHubContextRoute);
+                        var desiredTransports =
+                            HttpTransportType.WebSockets |
+                            HttpTransportType.LongPolling;
+
+                        configure.MapHub<GridEventsHub>(options.ViewerHubContextRoute, (opt) =>
+                        {
+                            opt.Transports = desiredTransports;
+                        });
                     });
                 }
 

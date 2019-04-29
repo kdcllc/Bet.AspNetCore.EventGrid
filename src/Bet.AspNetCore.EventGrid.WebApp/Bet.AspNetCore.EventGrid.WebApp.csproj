@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bet.AspNetCore.EvenGrid\Bet.AspNetCore.EvenGrid.csproj" />
-    <ProjectReference Include="..\Bet.AspNetCore.EventGrid.Viewer\Bet.AspNetCore.EventGrid.Viewer.csproj" />
   </ItemGroup>
 
 </Project>

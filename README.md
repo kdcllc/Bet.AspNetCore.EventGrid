@@ -16,8 +16,12 @@ The middleware and viewer for Azure Event Grid.
 ```csharp
 
     services.AddEvenGridWebhooks()
-        .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
-        .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
+                .AddViewerHubContext()
+                .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
+                .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
+
+    // enable Azure Grid Event Viewer
+    services.AddEventGridViewer();
 ```
 
 2. Add Middleware
@@ -49,6 +53,12 @@ public class CustomerWebhook : IEventGridWebhook<CustomerCreatedEvent>
         }
     }
 ```
+
+4. Azure Event Grid Viewer
+
+To see messages coming in to the middleware.
+
+> https://localhost:5001/channel/viewer
 
 ## Test Data for Bet.AspNetCore.EventGrid.WebApp project
 

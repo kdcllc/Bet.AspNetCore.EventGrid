@@ -11,8 +11,14 @@
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <Description>Azure Event Grid Viewer.</Description>
+    <PackageTags>aspnetcore, dotnetcore, azure, event grid, viewer</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="wwwroot\**\*" />
+    <None Remove="wwwroot\Channel\lib\signalr.min.js" />
     <Content Update="**\*.cshtml" Pack="false" />
   </ItemGroup>
 

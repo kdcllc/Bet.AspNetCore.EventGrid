@@ -9,12 +9,6 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 {
     internal class EventGridWebhooksOptions
     {
-        private readonly EventGridSubscriber _eventGridSubscriber;
-
-        public EventGridWebhooksOptions()
-        {
-            _eventGridSubscriber = new EventGridSubscriber();
-        }
 
         public ICollection<EventGridWebhookRegistration> WebHooksRegistrations { get; } = new List<EventGridWebhookRegistration>();
 
@@ -27,16 +21,6 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
         public bool ViewerHubContextEnabled { get; set; } = false;
 
         public string ViewerHubContextRoute { get; set; }
-
-        public EventGridSubscriber GetEventGridSubscriber()
-        {
-            foreach (var registration in WebHooksRegistrations)
-            {
-                _eventGridSubscriber.AddOrUpdateCustomEventMapping(registration.EventGridType, registration.EventType);
-            }
-
-            return _eventGridSubscriber;
-        }
 
         public Func<HttpContext, bool> EventTypeSubcriptionValidation = (context) => context.Request.Headers["aeg-event-type"].FirstOrDefault() == "SubscriptionValidation";
 

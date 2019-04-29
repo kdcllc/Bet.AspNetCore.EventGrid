@@ -28,6 +28,7 @@ namespace Bet.AspNetCore.EventGrid.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddEvenGridWebhooks()
+                .AddViewerHubContext()
                 .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
                 .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
 
@@ -52,7 +53,6 @@ namespace Bet.AspNetCore.EventGrid.WebApp
             app.UseEventGridWebHooks();
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseMvc();
         }

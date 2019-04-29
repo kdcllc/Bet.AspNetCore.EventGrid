@@ -22,7 +22,6 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 {
     internal class EventGridWebhookMiddleware
     {
-        private readonly EventGridSubscriber _eventGridSubscriber;
         private readonly RequestDelegate _next;
         private readonly IServiceProvider _serviceProvider;
         private readonly IHostingEnvironment _enviroment;
@@ -44,7 +43,6 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _options = options.Value;
 
-            _eventGridSubscriber = _options.GetEventGridSubscriber();
             _hubContext = gridEventsHubContext;
         }
 
