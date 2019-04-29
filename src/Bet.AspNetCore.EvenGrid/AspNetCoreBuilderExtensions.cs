@@ -18,8 +18,17 @@ namespace Microsoft.AspNetCore.Builder
 
             app.MapWhen(context => context.Request.Path.StartsWithSegments(options.HttpRoute), builder =>
             {
+                if (options.ViewerHubContextEnabled)
+                {
+                    app.UseSignalR(routes =>
+                    {
+                        routes.MapHub<GridEventsHub>(options.ViewerHubContextRoute);
+                    });
+                }
+
                 builder.UseMiddleware<EventGridWebhookMiddleware>();
             });
+
             return app;
         }
     }

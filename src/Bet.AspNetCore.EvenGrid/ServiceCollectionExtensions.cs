@@ -20,6 +20,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var builder = new DefaultEventGridWebhookBuilder(services);
 
+            builder.Services.AddSignalR();
+
             builder.Services.Configure<EventGridWebhooksOptions>(options =>
             {
                 options.HttpRoute = route;

@@ -31,6 +31,8 @@ namespace Bet.AspNetCore.EventGrid.WebApp
                 .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
                 .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
 
+            services.AddEventGridViewer();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -50,6 +52,8 @@ namespace Bet.AspNetCore.EventGrid.WebApp
             app.UseEventGridWebHooks();
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
             app.UseMvc();
         }
     }

@@ -1,4 +1,4 @@
-﻿
+﻿using Bet.AspNetCore.EvenGrid.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bet.AspNetCore.EvenGrid.Webhooks
@@ -20,5 +20,12 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
         IEventGridWebhookBuilder AddWebhook<TWebHook, TEvent>(string eventTypeName)
             where TEvent : EventGridWebhookEvent
             where TWebHook : class, IEventGridWebhook<TEvent>;
+
+        /// <summary>
+        /// Adds SignalR hub to be used with the Viewer.
+        /// </summary>
+        /// <param name="httpRoute">The default values is '/hubs/gridevents'</param>
+        /// <returns></returns>
+        IEventGridWebhookBuilder AddViewerHubContext(string httpRoute = "/hubs/gridevents");
     }
 }
