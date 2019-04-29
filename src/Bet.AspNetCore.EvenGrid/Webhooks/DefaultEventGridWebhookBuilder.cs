@@ -4,11 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bet.AspNetCore.EvenGrid.Webhooks
 {
-    internal class DefaultEventGridBuilder : IEventGridBuilder
+    internal class DefaultEventGridWebhookBuilder : IEventGridWebhookBuilder
     {
         public IServiceCollection Services { get; }
 
-        public DefaultEventGridBuilder(IServiceCollection services)
+        public DefaultEventGridWebhookBuilder(IServiceCollection services)
         {
             Services = services ?? throw new ArgumentNullException(nameof(services));
         }
@@ -20,7 +20,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
         /// <typeparam name="TEvent">The type of the event grid webhook event.</typeparam>
         /// <param name="eventTypeName">The name of the event grid grouping.</param>
         /// <returns></returns>
-        public IEventGridBuilder AddWebhook<TWebhook, TEvent>(string eventTypeName)
+        public IEventGridWebhookBuilder AddWebhook<TWebhook, TEvent>(string eventTypeName)
            where TEvent : EventGridWebhookEvent
            where TWebhook : class, IEventGridWebhook<TEvent>
         {

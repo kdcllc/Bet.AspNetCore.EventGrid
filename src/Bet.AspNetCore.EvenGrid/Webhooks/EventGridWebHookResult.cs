@@ -2,6 +2,9 @@
 
 namespace Bet.AspNetCore.EvenGrid.Webhooks
 {
+    /// <summary>
+    /// The result message for the custom event grid webhook processors.
+    /// </summary>
     public class EventGridWebHookResult
     {
         public EventGridWebHookResult(Exception exception = null)

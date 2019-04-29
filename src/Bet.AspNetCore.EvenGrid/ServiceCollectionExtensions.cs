@@ -12,13 +12,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="method">The HTTP method. The default value is 'POST'.</param>
         /// <param name="throwIfException">Throw exceptions within the middleware. The default is 'true'.</param>
         /// <returns></returns>
-        public static IEventGridBuilder AddEvenGridWebhooks(
+        public static IEventGridWebhookBuilder AddEvenGridWebhooks(
             this IServiceCollection services,
             string route = "/webhooks",
             string method = "POST",
             bool throwIfException = true)
         {
-            var builder = new DefaultEventGridBuilder(services);
+            var builder = new DefaultEventGridWebhookBuilder(services);
 
             builder.Services.Configure<EventGridWebhooksOptions>(options =>
             {

@@ -102,7 +102,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 
                             var result = await (Task<EventGridWebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, cts.Token });
 
-                            if (result.Exception != null)
+                            if (result?.Exception != null)
                             {
                                 _logger.LogError(result.Exception.Message, "");
                                 tasksExeptions.Add(result);
