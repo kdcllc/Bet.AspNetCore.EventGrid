@@ -6,9 +6,9 @@ The middleware and viewer for Azure Event Grid.
 
 ```csharp
 
-  services.AddEvenGridWebhooks()
-                .AddEventProcessor<EmployeeHandler, EmployeeCreatedEvent>("Group.Employee")
-                .AddEventProcessor<CustomerHandler, CustomerCreatedEvent>("Group.Employee");
+    services.AddEvenGridWebhooks()
+        .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
+        .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
 ```
 
 2. Add Middleware

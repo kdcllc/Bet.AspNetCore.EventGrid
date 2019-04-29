@@ -7,7 +7,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
     {
         IServiceCollection Services { get; }
 
-        IEventGridBuilder AddEventProcessor<TEventProcessor, TEventType>(string eventTypeName)
+        IEventGridBuilder AddWebhook<TEventProcessor, TEventType>(string eventTypeName)
             where TEventType : EventGridWebhookEvent
             where TEventProcessor : class, IEventGridWebhook ;
     }
