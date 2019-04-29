@@ -25,7 +25,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicense>https://github.com/kdcllc/Bet.AspNetCore/master/LICENSE</PackageLicense>
     <PackageIconUrl>https://raw.githubusercontent.com/kdcllc/Bet.AspNetCore/master/img/logo64x64.png</PackageIconUrl>
-    <PackageTags>aspnetcore,dotnet,configuration,hosting,extensions,azurekeyvault</PackageTags>
+    <PackageTags>aspnetcore,dotnet,azure event grid, messaging, azure event grid topc</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
