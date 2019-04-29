@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using Bet.AspNetCore.EvenGrid.Webhooks;
 using Bet.AspNetCore.EventGrid.Viewer.Events;
+
 using Microsoft.Extensions.Logging;
 
 namespace Bet.AspNetCore.EventGrid.Viewer.Handler
@@ -18,8 +19,6 @@ namespace Bet.AspNetCore.EventGrid.Viewer.Handler
 
         public Task<EventGridWebHookResult> ProcessEventAsync(CustomerCreatedEvent @event, CancellationToken cancellationToken = default)
         {
-            //var data = @event as CustomerCreatedEvent;
-
             _logger.LogInformation("Executing: {data} ", @event);
 
             return Task.FromResult<EventGridWebHookResult>(null);

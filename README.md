@@ -24,8 +24,30 @@ The middleware and viewer for Azure Event Grid.
 
 ```csharp
 
-   app.UseEventGridHooks();
+   app.UseEventGridWebHooks();
 
+```
+
+3. WebHook implementation example
+
+```csharp
+
+public class CustomerWebhook : IEventGridWebhook<CustomerCreatedEvent>
+    {
+        private readonly ILogger<CustomerWebhook> _logger;
+
+        public CustomerWebhook(ILogger<CustomerWebhook> logger)
+        {
+            _logger = logger;
+        }
+
+        public Task<EventGridWebHookResult> ProcessEventAsync(CustomerCreatedEvent @event, CancellationToken cancellationToken = default)
+        {
+            _logger.LogInformation("Executing: {data} ", @event);
+
+            return Task.FromResult<EventGridWebHookResult>(null);
+        }
+    }
 ```
 
 ## Test Data for Bet.AspNetCore.EventGrid.Viewer project

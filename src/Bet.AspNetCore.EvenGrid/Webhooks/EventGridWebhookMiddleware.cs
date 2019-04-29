@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -10,11 +11,12 @@ using Microsoft.Azure.EventGrid;
 using Microsoft.Azure.EventGrid.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+
 using Newtonsoft.Json;
 
 namespace Bet.AspNetCore.EvenGrid.Webhooks
 {
-    public class EventGridWebhookMiddleware
+    internal class EventGridWebhookMiddleware
     {
         private readonly EventGridSubscriber _eventGridSubscriber;
         private readonly RequestDelegate _next;
@@ -38,6 +40,18 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 
         public async Task InvokeAsync(HttpContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (context.Request.Path != _options.HttpRoute
+                || context.Request.Method != _options.HttpMethod)
+            {
+                await _next(context);
+                return;
+            }
+
             using (var streamReader = new HttpRequestStreamReader(context.Request.Body, Encoding.UTF8))
             {
                 var requestContent = await streamReader.ReadToEndAsync();
@@ -54,6 +68,10 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                 var response = context.Response;
 
                 var eventGridEvents = _eventGridSubscriber.DeserializeEventGridEvents(requestContent);
+
+                var tasksExeptions = new List<EventGridWebHookResult>();
+
+                var cts = new CancellationTokenSource();
 
                 foreach (var eventGridEvent in eventGridEvents)
                 {
@@ -82,18 +100,36 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 
                             var method = webhook.WebhookType.GetMethod("ProcessEventAsync");
 
-                            EventGridWebHookResult result;
+                            var result = await (Task<EventGridWebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, cts.Token });
 
-                            var cts = new CancellationTokenSource();
-
-                            result = await (Task<EventGridWebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, cts.Token });
-
+                            if (result.Exception != null)
+                            {
+                                _logger.LogError(result.Exception.Message, "");
+                                tasksExeptions.Add(result);
+                            }
                         }
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "An error occurred processing a webhook event. Message: {MessageBody}", JsonConvert.SerializeObject(eventGridEvent));
-                        throw;
+                        if (_logger.IsEnabled(LogLevel.Debug))
+                        {
+                            _logger.LogError(ex, "An error occurred processing an Event Grid Webhook Message: {MessageBody}", JsonConvert.SerializeObject(eventGridEvent));
+                        }
+                        else
+                        {
+                            _logger.LogInformation("An error occurred processing an Event Grid Webhook Message.");
+                        }
+                        tasksExeptions.Add(new EventGridWebHookResult(ex));
+                    }
+                    finally
+                    {
+                        cts?.Dispose();
+                    }
+
+                    if (_options.ThrowIfException
+                        && tasksExeptions.Count > 0)
+                    {
+                        throw new AggregateException($"{nameof(EventGridWebhookMiddleware)} raised exceptions.", tasksExeptions.Select(x=> x.Exception));
                     }
                 }
             }

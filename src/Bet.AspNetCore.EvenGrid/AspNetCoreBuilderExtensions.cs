@@ -7,7 +7,12 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class AspNetCoreBuilderExtensions
     {
-        public static IApplicationBuilder UseEventGridHooks(this IApplicationBuilder app)
+        /// <summary>
+        /// Use Event Grid WebHooks middleware.
+        /// </summary>
+        /// <param name="app">The MVC <see cref="IApplicationBuilder"/>.</param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseEventGridWebHooks(this IApplicationBuilder app)
         {
             var options = app.ApplicationServices.GetRequiredService<IOptions<EventGridWebhooksOptions>>().Value;
 

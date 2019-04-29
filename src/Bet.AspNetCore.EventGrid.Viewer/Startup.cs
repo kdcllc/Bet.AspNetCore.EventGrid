@@ -47,7 +47,7 @@ namespace Bet.AspNetCore.EventGrid.Viewer
                 app.UseHsts();
             }
 
-            app.UseEventGridHooks();
+            app.UseEventGridWebHooks();
 
             app.UseHttpsRedirection();
             app.UseMvc();

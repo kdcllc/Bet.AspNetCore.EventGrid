@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+
 using Microsoft.Azure.EventGrid;
 
 namespace Bet.AspNetCore.EvenGrid.Webhooks
 {
-    public class EventGridWebhooksOptions
+    internal class EventGridWebhooksOptions
     {
         private readonly EventGridSubscriber _eventGridSubscriber;
 
@@ -15,6 +16,10 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
         public ICollection<EventGridWebhookRegistration> WebHooksRegistrations { get; } = new List<EventGridWebhookRegistration>();
 
         public string HttpRoute { get; set; }
+
+        public string HttpMethod { get; set; } = "POST";
+
+        public bool ThrowIfException { get; set; } = true;
 
         public EventGridSubscriber GetEventGridSubscriber()
         {
