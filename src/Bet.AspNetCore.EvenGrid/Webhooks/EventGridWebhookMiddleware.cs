@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
@@ -75,15 +76,18 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                         }
                         else if (eventGridEvent.Data is EventGridWebhookEvent messageEventData)
                         {
-                            var registration = _options.Registrations.First(x => x.EventType == messageEventData.GetType());
+                            var webhook = _options.WebHooksRegistrations.First(x => x.EventType == messageEventData.GetType());
 
-                            var service = registration.Factory(_serviceProvider);
+                            var service = webhook.Factory(_serviceProvider);
+
+                            var method = webhook.WebhookType.GetMethod("ProcessEventAsync");
 
                             EventGridWebHookResult result;
 
-                            var data = eventGridEvent.Data as EventGridWebhookEvent;
+                            var cts = new CancellationTokenSource();
 
-                            result = await service.ProcessEventAsync(data);
+                            result = await (Task<EventGridWebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, cts.Token });
+
                         }
                     }
                     catch (Exception ex)

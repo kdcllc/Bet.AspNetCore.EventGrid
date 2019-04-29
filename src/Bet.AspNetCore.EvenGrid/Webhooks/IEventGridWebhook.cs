@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 
 namespace Bet.AspNetCore.EvenGrid.Webhooks
 {
-    public interface IEventGridWebhook
+    public interface IEventGridWebhook<T>
     {
         Task<EventGridWebHookResult> ProcessEventAsync(
-            EventGridWebhookEvent @event,
+            T @event,
             CancellationToken cancellationToken = default);
     }
 }

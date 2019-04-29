@@ -11,7 +11,7 @@ namespace Microsoft.AspNetCore.Builder
         {
             var options = app.ApplicationServices.GetRequiredService<IOptions<EventGridWebhooksOptions>>().Value;
 
-            app.MapWhen(context => context.Request.Path.StartsWithSegments(options.Route), builder =>
+            app.MapWhen(context => context.Request.Path.StartsWithSegments(options.HttpRoute), builder =>
             {
                 builder.UseMiddleware<EventGridWebhookMiddleware>();
             });

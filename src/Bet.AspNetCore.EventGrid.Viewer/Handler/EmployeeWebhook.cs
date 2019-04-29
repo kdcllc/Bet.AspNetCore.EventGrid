@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Bet.AspNetCore.EventGrid.Viewer.Handler
 {
-    public class EmployeeWebhook : IEventGridWebhook
+    public class EmployeeWebhook : IEventGridWebhook<EmployeeCreatedEvent>
     {
         private readonly ILogger<EmployeeWebhook> _logger;
 
@@ -16,9 +16,9 @@ namespace Bet.AspNetCore.EventGrid.Viewer.Handler
             _logger = logger;
         }
 
-        public Task<EventGridWebHookResult> ProcessEventAsync(EventGridWebhookEvent @event, CancellationToken cancellationToken = default)
+        public Task<EventGridWebHookResult> ProcessEventAsync(EmployeeCreatedEvent @event, CancellationToken cancellationToken = default)
         {
-            var data = @event as EmployeeCreatedEvent;
+            // var data = @event as EmployeeCreatedEvent;
 
             _logger.LogInformation("Executing: {data} ", @event);
 

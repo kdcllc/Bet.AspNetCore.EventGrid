@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             builder.Services.Configure<EventGridWebhooksOptions>(options =>
             {
-                options.Route = route;
+                options.HttpRoute = route;
             });
 
             return builder;

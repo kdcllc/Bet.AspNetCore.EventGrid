@@ -13,16 +13,17 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             Services = services ?? throw new ArgumentNullException(nameof(services));
         }
 
-        public IEventGridBuilder AddWebhook<TWebhook, TEventType>(string eventTypeName)
-           where TEventType : EventGridWebhookEvent
-           where TWebhook : class, IEventGridWebhook
+        public IEventGridBuilder AddWebhook<TWebhook, TEvent>(string eventTypeName)
+           where TEvent : EventGridWebhookEvent
+           where TWebhook : class, IEventGridWebhook<TEvent>
         {
             Services.Configure<EventGridWebhooksOptions>(options =>
             {
-                options.Registrations.Add(new EventGridWebhookRegistration(
+                options.WebHooksRegistrations.Add(new EventGridWebhookRegistration(
                     eventTypeName,
                     sp => ActivatorUtilities.GetServiceOrCreateInstance<TWebhook>(sp),
-                    typeof(TEventType)));
+                    typeof(TEvent),
+                    typeof(TWebhook)));
             });
 
             return this;
