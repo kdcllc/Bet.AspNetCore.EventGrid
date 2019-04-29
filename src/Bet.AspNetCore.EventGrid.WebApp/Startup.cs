@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Bet.AspNetCore.EventGrid.Viewer.Events;
-using Bet.AspNetCore.EventGrid.Viewer.Handler;
+using Bet.AspNetCore.EventGrid.WebApp.Events;
+using Bet.AspNetCore.EventGrid.WebApp.Handler;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Bet.AspNetCore.EventGrid.Viewer
+namespace Bet.AspNetCore.EventGrid.WebApp
 {
     public class Startup
     {

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Bet.AspNetCore.EventGrid.Viewer
+namespace Bet.AspNetCore.EventGrid.WebApp
 {
     public class Program
     {

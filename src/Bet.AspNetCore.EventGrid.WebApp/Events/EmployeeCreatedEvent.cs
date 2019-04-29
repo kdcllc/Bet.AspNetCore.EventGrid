@@ -1,8 +1,8 @@
 ﻿using Bet.AspNetCore.EvenGrid.Webhooks;
 
-namespace Bet.AspNetCore.EventGrid.Viewer.Events
+namespace Bet.AspNetCore.EventGrid.WebApp.Events
 {
-    public class CustomerCreatedEvent : EventGridWebhookEvent
+    public class EmployeeCreatedEvent : EventGridWebhookEvent
     {
         public string Id { get; set; }
         public string Name { get; set; }

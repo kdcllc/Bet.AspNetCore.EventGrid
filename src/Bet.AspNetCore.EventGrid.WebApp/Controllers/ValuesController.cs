@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Bet.AspNetCore.EventGrid.Viewer.Controllers
+namespace Bet.AspNetCore.EventGrid.WebApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

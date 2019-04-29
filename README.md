@@ -50,7 +50,7 @@ public class CustomerWebhook : IEventGridWebhook<CustomerCreatedEvent>
     }
 ```
 
-## Test Data for Bet.AspNetCore.EventGrid.Viewer project
+## Test Data for Bet.AspNetCore.EventGrid.WebApp project
 
 ```json
 [

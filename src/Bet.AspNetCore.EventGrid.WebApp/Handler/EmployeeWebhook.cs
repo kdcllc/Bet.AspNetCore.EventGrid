@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 
 using Bet.AspNetCore.EvenGrid.Webhooks;
-using Bet.AspNetCore.EventGrid.Viewer.Events;
+using Bet.AspNetCore.EventGrid.WebApp.Events;
 using Microsoft.Extensions.Logging;
 
-namespace Bet.AspNetCore.EventGrid.Viewer.Handler
+namespace Bet.AspNetCore.EventGrid.WebApp.Handler
 {
     public class EmployeeWebhook : IEventGridWebhook<EmployeeCreatedEvent>
     {
