@@ -1,0 +1,49 @@
+<Project>
+  <PropertyGroup>
+    <NetCoreCommonVersion>2.2.*</NetCoreCommonVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2' Or '$(TargetFramework)' == 'netstandard2.0'">
+    <NetCoreCommonVersion>2.2.*</NetCoreCommonVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <NetCoreCommonVersion>3.0.0-preview4*</NetCoreCommonVersion>
+  </PropertyGroup>
+
+  <ItemGroup Label="NetCore">
+
+    <PackageReference Update="Microsoft.AspNetCore.Http" Version="$(NetCoreCommonVersion)" />
+
+    <PackageReference Update="Microsoft.Extensions.Logging.Abstractions" Version="$(NetCoreCommonVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Logging.Debug" Version="$(NetCoreCommonVersion)" />
+    <PackageReference Update="Microsoft.Extensions.ObjectPool" Version="$(NetCoreCommonVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Options" Version="$(NetCoreCommonVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Options.ConfigurationExtensions" Version="$(NetCoreCommonVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Options.DataAnnotations" Version="$(NetCoreCommonVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Primitives" Version="$(NetCoreCommonVersion)" />
+    <PackageReference Update="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(NetCoreCommonVersion)" />
+  </ItemGroup>
+
+  <ItemGroup Label="Azure Key Vault">
+    <PackageReference Update="Microsoft.Azure.Services.AppAuthentication" Version="1.0.3"/>
+    <PackageReference Update="Microsoft.Azure.KeyVault" Version="3.0.3" />
+    <PackageReference Update="Microsoft.Extensions.Configuration.AzureKeyVault" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Unit Tests">
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+    <PackageReference Update="Moq" Version="4.10.1" />
+    <PackageReference Update="xunit" Version="2.4.1" />
+    <PackageReference Update="xunit.runner.visualstudio" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup Label="Shared">
+    <PackageReference Update="Microsoft.NET.Sdk.Functions" Version="1.0.24" />
+    <PackageReference Update="Microsoft.Azure.EventGrid" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="SourceLink">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
+  </ItemGroup>
+</Project>

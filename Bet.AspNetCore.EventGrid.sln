@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EventGrid.Viewer", "src\Bet.AspNetCore.EventGrid.Viewer\Bet.AspNetCore.EventGrid.Viewer.csproj", "{457D1C0A-A9EA-4169-BDA3-6F4F72D44D89}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EvenGrid", "src\Bet.AspNetCore.EvenGrid\Bet.AspNetCore.EvenGrid.csproj", "{2534FB35-1A0F-4721-932C-C72FE6497D39}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.Func", "src\Bet.AspNetCore.Func\Bet.AspNetCore.Func.csproj", "{54D2B3DC-186B-4831-9887-A280305D9087}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Broadcaster", "src\Broadcaster\Broadcaster.csproj", "{584E982E-A9DD-4612-95F3-9711497BF50A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{8E4EA599-1755-4EA6-BB7F-DFCB431CB413}"
+	ProjectSection(SolutionItems) = preProject
+		build\dependencies.props = build\dependencies.props
+		build\settings.props = build\settings.props
+		build\sources.props = build\sources.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{46211E43-0E61-457D-B35B-E7B9D32923E4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		appveyor.yml = appveyor.yml
+		clean.sh = clean.sh
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{457D1C0A-A9EA-4169-BDA3-6F4F72D44D89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{457D1C0A-A9EA-4169-BDA3-6F4F72D44D89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{457D1C0A-A9EA-4169-BDA3-6F4F72D44D89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{457D1C0A-A9EA-4169-BDA3-6F4F72D44D89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2534FB35-1A0F-4721-932C-C72FE6497D39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2534FB35-1A0F-4721-932C-C72FE6497D39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2534FB35-1A0F-4721-932C-C72FE6497D39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2534FB35-1A0F-4721-932C-C72FE6497D39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54D2B3DC-186B-4831-9887-A280305D9087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54D2B3DC-186B-4831-9887-A280305D9087}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54D2B3DC-186B-4831-9887-A280305D9087}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54D2B3DC-186B-4831-9887-A280305D9087}.Release|Any CPU.Build.0 = Release|Any CPU
+		{584E982E-A9DD-4612-95F3-9711497BF50A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{584E982E-A9DD-4612-95F3-9711497BF50A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{584E982E-A9DD-4612-95F3-9711497BF50A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{584E982E-A9DD-4612-95F3-9711497BF50A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {749D7EF8-C2B7-4314-A7B2-850C63C5C3BC}
+	EndGlobalSection
+EndGlobal
