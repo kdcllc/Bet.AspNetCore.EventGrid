@@ -9,7 +9,6 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 {
     internal class EventGridWebhooksOptions
     {
-
         public ICollection<EventGridWebhookRegistration> WebHooksRegistrations { get; } = new List<EventGridWebhookRegistration>();
 
         public string HttpRoute { get; set; }
