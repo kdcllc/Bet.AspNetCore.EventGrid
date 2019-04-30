@@ -27,6 +27,7 @@
     <th>&nbsp;</th>
     <th>Event Type</th>
     <th>Subject</th>
+    <th>Success</th>
     </thead>
     <tbody id="grid-event-details"></tbody>
 </table>
@@ -40,6 +41,7 @@
         </td>
         <td>{{gridEventType}}</td>
         <td>{{gridEventSubject}}</td>
+        <td>{{gridEx}}</td>
     </tr>
     <tr class="hiddenRow collapse" id="event-{{gridEventId}}">
         <td colspan="12">
@@ -74,12 +76,13 @@
             $("#grid-events").hide();
         }
 
-        var addEvent = function (id, eventType, subject, eventTime, data) {
+        var addEvent = function (id, eventType, subject, eventTime, data, ex) {
             var context = {
                 gridEventType: eventType,
                 gridEventSubject: subject,
                 gridEventId: id,
-                gridEvent: data
+                gridEvent: data,
+                gridEx: ex
             };
             var source = document.getElementById('event-template').innerHTML;
             var template = Handlebars.compile(source);
@@ -107,8 +110,8 @@
                 .build();
 
             hubConnection.start().catch(err => console.error(err.toString()));
-            hubConnection.on('gridupdate', function (id, eventType, subject, eventTime, data) {
-                addEvent(id, eventType, subject, eventTime, data);
+            hubConnection.on('gridupdate', function (id, eventType, subject, eventTime, data, ex) {
+                addEvent(id, eventType, subject, eventTime, data, ex);
             });
         };
 
