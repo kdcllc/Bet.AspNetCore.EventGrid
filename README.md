@@ -58,7 +58,7 @@ public class CustomerWebhook : IEventGridWebhook<CustomerCreatedEvent>
 
 To see messages coming in to the middleware.
 
-> https://localhost:5001/channel/viewer
+> https://localhost:5001/events/viewer
 
 ## Test Data for Bet.AspNetCore.EventGrid.WebApp project
 

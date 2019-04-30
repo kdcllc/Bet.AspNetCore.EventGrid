@@ -10,14 +10,14 @@
     <title>@ViewData["Title"] - @Environment.ApplicationName</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/Channel/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/Channel/css/site.css" />
+        <link rel="stylesheet" href="~/Events/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/Events/css/site.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-              asp-fallback-href="~/Channel/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-href="~/Events/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/Channel/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/Events/css/site.css" asp-append-version="true" />
     </environment>
 </head>
 <body>
@@ -34,6 +34,7 @@
 
                     </div>
                 </div>
+            </div>
         </nav>
     </header>
 
@@ -49,22 +50,22 @@
     </footer>
 
     <environment include="Development">
-        <script src="~/Channel/lib/jquery/dist/jquery.js"></script>
-        <script src="~/Channel/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
-        <script src="~/Channel/js/site.js" asp-append-version="true"></script>
+        <script src="~/Events/lib/jquery/dist/jquery.js"></script>
+        <script src="~/Events/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script src="~/Events/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-                asp-fallback-src="~/Channel/lib/jquery/dist/jquery.min.js"
+                asp-fallback-src="~/Events/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery"
                 crossorigin="anonymous"
                 integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
-                asp-fallback-src="~/Channel/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/Events/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
                 crossorigin="anonymous"
                 integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"></script>
-        <script src="~/Channel/js/site.js" asp-append-version="true"></script>
+        <script src="~/Events/js/site.js" asp-append-version="true"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)

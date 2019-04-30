@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="wwwroot\**\*" />
-    <None Remove="wwwroot\Channel\lib\signalr.min.js" />
     <Content Update="**\*.cshtml" Pack="false" />
   </ItemGroup>
 

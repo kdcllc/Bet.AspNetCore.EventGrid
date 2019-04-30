@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Bet.AspNetCore.EventGrid.Viewer.Channel.Pages
+namespace Bet.AspNetCore.EventGrid.Viewer.Events.Pages
 {
     public class ViewerModel : PageModel
     {
