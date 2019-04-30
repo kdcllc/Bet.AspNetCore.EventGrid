@@ -20,11 +20,11 @@
 
   <PropertyGroup Label="Nuget Package Settings">
     <Description>AspNetCore EventGrid middleware and more.</Description>
-    <PackageProjectUrl>https://github.com/kdcllc/Bet.AspNetCore</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/kdcllc/Bet.AspNetCore.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/kdcllc/Bet.AspNetCore.EventGrid</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/kdcllc/Bet.AspNetCore.EventGrid.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageLicense>https://github.com/kdcllc/Bet.AspNetCore/master/LICENSE</PackageLicense>
-    <PackageIconUrl>https://raw.githubusercontent.com/kdcllc/Bet.AspNetCore/master/img/logo64x64.png</PackageIconUrl>
+    <PackageLicense>https://github.com/kdcllc/Bet.AspNetCore.EventGrid/master/LICENSE</PackageLicense>
+    <PackageIconUrl>https://raw.githubusercontent.com/kdcllc/Bet.AspNetCore.EventGrid/master/img/logo64x64.png</PackageIconUrl>
     <PackageTags>aspnetcore, dotnet, azure event grid, messaging, azure event grid topic</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
