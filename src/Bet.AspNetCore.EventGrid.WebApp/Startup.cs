@@ -28,11 +28,9 @@ namespace Bet.AspNetCore.EventGrid.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddEvenGridWebhooks()
-                .AddViewerHubContext()
+                .AddViewerHubContext("/hubs/grid")
                 .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
                 .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
-
-            services.AddEventGridViewer();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

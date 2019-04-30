@@ -1,7 +1,13 @@
 ﻿@page
 @model Bet.AspNetCore.EventGrid.Viewer.Events.Pages.ViewerModel
 
+@using Microsoft.Extensions.Options
+@inject IOptionsSnapshot<ViewerOptions> options
+
+@using Bet.AspNetCore.EventGrid.Viewer
+
 @{
+    var eventHubUri = options.Value.Route;
 
     var host = Request.Scheme + "://" + Request.Host;
 
@@ -93,6 +99,7 @@
         }
 
         var host = "@host";
+        var hubUri = "@eventHubUri";
 
         var initialize = function () {
             $("#grid-events").hide();
@@ -102,7 +109,7 @@
             });
 
             hubConnection = new signalR.HubConnectionBuilder()
-                .withUrl(host + "/hubs/gridevents", {
+                .withUrl(host + hubUri, {
                     skipNegotiation: true,
                     transport: signalR.HttpTransportType.WebSockets
                 })

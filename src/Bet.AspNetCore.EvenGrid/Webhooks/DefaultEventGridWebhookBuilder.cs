@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Bet.AspNetCore.EventGrid.Viewer;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bet.AspNetCore.EvenGrid.Webhooks
@@ -38,6 +38,13 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 
         public IEventGridWebhookBuilder AddViewerHubContext(string httpRoute = "/hubs/gridevents")
         {
+            Services.ConfigureOptions<DefaultUIConfigureOptions>();
+
+            Services.Configure<ViewerOptions>(o =>
+            {
+                o.Route = httpRoute;
+            });
+
             Services.Configure<EventGridWebhooksOptions>(options =>
             {
                 options.ViewerHubContextEnabled = true;
