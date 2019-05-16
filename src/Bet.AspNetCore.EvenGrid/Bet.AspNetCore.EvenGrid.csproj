@@ -9,7 +9,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="Microsoft.Azure.EventGrid" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR"  />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" />
   </ItemGroup>
 
   <ItemGroup>

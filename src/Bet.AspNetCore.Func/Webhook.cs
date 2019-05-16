@@ -33,9 +33,8 @@ namespace Bet.AspNetCore.Func
 
             foreach (var eventGridEvent in eventGridEvents)
             {
-                if (eventGridEvent.Data is SubscriptionValidationEventData)
+                if (eventGridEvent.Data is SubscriptionValidationEventData eventData)
                 {
-                    var eventData = (SubscriptionValidationEventData)eventGridEvent.Data;
                     log.LogInformation($"Got SubscriptionValidation event data, validation code: {eventData.ValidationCode}, topic: {eventGridEvent.Topic}");
                     // Do any additional validation (as required) and then return back the below response
 

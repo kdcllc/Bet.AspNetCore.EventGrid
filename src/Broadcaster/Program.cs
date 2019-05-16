@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Web;
 using Bet.AspNetCore.EvenGrid.Webhooks;
 
 using Microsoft.Azure.EventGrid;
@@ -14,6 +16,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Broadcaster
 {
+    //https://stackoverflow.com/questions/50120429/what-is-the-key-to-generate-aeg-sas-token
     class Program
     {
         private static readonly string Key = Environment.GetEnvironmentVariable("EVENT_GRID_KEY");
@@ -46,10 +49,37 @@ namespace Broadcaster
             Console.WriteLine($"Sending: {content}");
 
             var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("aeg-sas-key", Key);
+            // client.DefaultRequestHeaders.Add("aeg-sas-key", Key); or token
+
+            var sasToken = BuildSharedAccessSignature($"{Endpoint}?api-version=2018-01-01", DateTime.UtcNow + TimeSpan.FromMinutes(8), Key);
+
+            client.DefaultRequestHeaders.Add("aeg-sas-token", sasToken);
+
             var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
             var result = await client.PostAsync(Endpoint, httpContent);
             var resultText = await result.Content.ReadAsStringAsync();
+
+            // https://docs.microsoft.com/en-us/azure/event-grid/security-authentication#sas-tokens
+            static string BuildSharedAccessSignature(string resource, DateTime expirationUtc, string key)
+            {
+                const char Resource = 'r';
+                const char Expiration = 'e';
+                const char Signature = 's';
+
+                var encodedResource = HttpUtility.UrlEncode(resource);
+                var culture = CultureInfo.CreateSpecificCulture("en-US");
+                var encodedExpirationUtc = HttpUtility.UrlEncode(expirationUtc.ToString(culture));
+
+                var unsignedSas = $"{Resource}={encodedResource}&{Expiration}={encodedExpirationUtc}";
+                using (var hmac = new HMACSHA256(Convert.FromBase64String(key)))
+                {
+                    var signature = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(unsignedSas)));
+                    string encodedSignature = HttpUtility.UrlEncode(signature);
+                    var signedSas = $"{unsignedSas}&{Signature}={encodedSignature}";
+
+                    return signedSas;
+                }
+            }
 
             Console.WriteLine($"Response: {result.StatusCode} - {resultText}.");
         }

@@ -31,7 +31,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bet.AspNetCore.EventGrid.Viewer", "src\Bet.AspNetCore.EventGrid.Viewer\Bet.AspNetCore.EventGrid.Viewer.csproj", "{F9B50267-D2C3-4BA9-AED6-5AC4839AA021}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EventGrid.Viewer", "src\Bet.AspNetCore.EventGrid.Viewer\Bet.AspNetCore.EventGrid.Viewer.csproj", "{F9B50267-D2C3-4BA9-AED6-5AC4839AA021}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{69D38EFB-8E35-4C2A-BF12-329ED290AFF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +64,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{457D1C0A-A9EA-4169-BDA3-6F4F72D44D89} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
+		{2534FB35-1A0F-4721-932C-C72FE6497D39} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
+		{54D2B3DC-186B-4831-9887-A280305D9087} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
+		{584E982E-A9DD-4612-95F3-9711497BF50A} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
+		{F9B50267-D2C3-4BA9-AED6-5AC4839AA021} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {749D7EF8-C2B7-4314-A7B2-850C63C5C3BC}
