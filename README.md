@@ -80,6 +80,18 @@ To see messages coming in to the middleware.
 ]
 ```
 
+## Testing Azure Event Grid Webhooks callbacks
+What if you want to test the round trip communication locally on your machine. [`ngrok`](https://ngrok.com/?source=kdcllc) to the rescue.
+
+1. Install with `npm i -g ngrok`.
+2. Run `Bet.AspNetCore.EventGrid.WebApp` project on port `5001`
+3. Run `ngrok http https://localhost:5001`
+![ngrok](./img/ngrok.server.jpg)
+4. Use the randomly generated URL for EventGrid Webhook. Create Event Subscription
+![eventgrid topic](./img/eventgrid-topic.jpg)
+
+
+
 ## Reference material
 
 1. [Azure Event Grid Viewer with ASP.NET Core and SignalR](https://madeofstrings.com/2018/03/14/azure-event-grid-viewer-with-asp-net-core-and-signalr/)

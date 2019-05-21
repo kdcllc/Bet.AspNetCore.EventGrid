@@ -37,7 +37,7 @@ namespace Broadcaster
             {
                 dynamic payload = new JObject();
                 payload.Id = Guid.NewGuid().ToString();
-                payload.EventType = "Event.Group.One";
+                payload.EventType = "Group.Employee";
                 payload.Subject = i;
                 payload.EventTime = DateTimeOffset.Now.ToString("o");
                 payload.Data = new JObject();
@@ -74,7 +74,7 @@ namespace Broadcaster
                 using (var hmac = new HMACSHA256(Convert.FromBase64String(key)))
                 {
                     var signature = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(unsignedSas)));
-                    string encodedSignature = HttpUtility.UrlEncode(signature);
+                    var encodedSignature = HttpUtility.UrlEncode(signature);
                     var signedSas = $"{unsignedSas}&{Signature}={encodedSignature}";
 
                     return signedSas;
@@ -98,7 +98,7 @@ namespace Broadcaster
                 events.Add(new EventGridEvent
                 {
                     Id = Guid.NewGuid().ToString(),
-                    EventType = "Event.Group.One",
+                    EventType = "Group.Employee",
                     Data = new Employee
                     {
                         Id = $"Item #{1}"
