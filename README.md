@@ -80,7 +80,28 @@ To see messages coming in to the middleware.
 ]
 ```
 
+## Event Grid Http Message Hander for SAS Token Authentication
+
+```csharp
+
+ var client = new HttpClient(new SasAuthorizeMessageHandler(new SasAuthorizeOptions(
+                Endpoint, Key, TimeSpan.FromMinutes(8))) { InnerHandler = new HttpClientHandler() });
+```
+
+## Testing Azure Event Grid Webhooks callbacks
+What if you want to test the round trip communication locally on your machine. [`ngrok`](https://ngrok.com/?source=kdcllc) to the rescue.
+
+1. Install with `npm i -g ngrok`.
+2. Run `Bet.AspNetCore.EventGrid.WebApp` project on port `5001`
+3. Run `ngrok http https://localhost:5001` (to test function locally run `ngrok http -host-header=localhost 7071`)
+![ngrok](./img/ngrok.server.jpg)
+4. Use the randomly generated URL for EventGrid Webhook. Create Event Subscription
+![eventgrid topic](./img/eventgrid-topic.jpg)
+
+
+
 ## Reference material
 
 1. [Azure Event Grid Viewer with ASP.NET Core and SignalR](https://madeofstrings.com/2018/03/14/azure-event-grid-viewer-with-asp-net-core-and-signalr/)
 2. [Receive events to an HTTP endpoint](https://docs.microsoft.com/en-us/azure/event-grid/receive-events)
+3. [Locally debugging an Azure Function triggered by Azure Event Grid](https://blogs.msdn.microsoft.com/brandonh/2017/11/30/locally-debugging-an-azure-function-triggered-by-azure-event-grid/)

@@ -1,4 +1,6 @@
-﻿using Bet.AspNetCore.EvenGrid.Webhooks;
+﻿using Bet.AspNetCore.EvenGrid.SasKey.AzureEventGridSimulator.Middleware;
+using Bet.AspNetCore.EvenGrid.Webhooks;
+
 using Newtonsoft.Json.Serialization;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -37,5 +39,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return builder;
         }
+
+        public static IServiceCollection AddSasKeyValidation(this IServiceCollection services)
+        {
+            services.AddScoped<SasKeyValidator>();
+            return services;
+        }
+
     }
 }
