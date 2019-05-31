@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Azure.EventGrid;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -203,11 +204,14 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                     throw new ArgumentException($"Can't find a Event Grid Webhook for this grid event: {@event.EventType}");
                 }
 
-                var service = webhook.Factory(_serviceProvider);
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var service = webhook.Factory(scope.ServiceProvider);
 
-                var method = webhook.WebhookType.GetMethod("ProcessEventAsync");
+                    var method = webhook.WebhookType.GetMethod("ProcessEventAsync");
 
-                result = await (Task<EventGridWebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, token });
+                    result = await (Task<EventGridWebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, token });
+                }
             }
             catch (Exception ex)
             {
