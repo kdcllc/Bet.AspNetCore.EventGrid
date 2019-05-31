@@ -23,6 +23,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var builder = new DefaultEventGridWebhookBuilder(services);
 
+            builder.Services.AddTransient<EventGridWebhookMiddleware>();
+
             builder.Services.AddSignalR()
                     .AddJsonProtocol(options =>
                     {

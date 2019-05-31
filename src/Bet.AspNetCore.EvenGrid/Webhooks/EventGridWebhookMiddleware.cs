@@ -21,9 +21,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Bet.AspNetCore.EvenGrid.Webhooks
 {
-    internal class EventGridWebhookMiddleware
+    internal class EventGridWebhookMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
         private readonly IServiceProvider _serviceProvider;
         private readonly IHostingEnvironment _enviroment;
         private readonly ILogger<EventGridWebhookMiddleware> _logger;
@@ -31,14 +30,12 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
         private readonly IHubContext<GridEventsHub> _hubContext;
 
         public EventGridWebhookMiddleware(
-            RequestDelegate next,
             IServiceProvider serviceProvider,
             IHostingEnvironment enviroment,
             IOptions<EventGridWebhooksOptions> options,
             IHubContext<GridEventsHub> gridEventsHubContext,
             ILogger<EventGridWebhookMiddleware> logger)
         {
-            _next = next ?? throw new ArgumentNullException(nameof(next));
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _enviroment = enviroment;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -47,7 +44,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             _hubContext = gridEventsHubContext;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             if (context == null)
             {
@@ -57,7 +54,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             if (context.Request.Path != _options.HttpRoute
                 || context.Request.Method != _options.HttpMethod)
             {
-                await _next(context);
+                await next(context);
                 return;
             }
 
@@ -204,14 +201,12 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                     throw new ArgumentException($"Can't find a Event Grid Webhook for this grid event: {@event.EventType}");
                 }
 
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var service = webhook.Factory(scope.ServiceProvider);
 
-                    var method = webhook.WebhookType.GetMethod("ProcessEventAsync");
+                var service = webhook.Factory(_serviceProvider);
 
-                    result = await (Task<EventGridWebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, token });
-                }
+                var method = webhook.WebhookType.GetMethod("ProcessEventAsync");
+
+                result = await (Task<EventGridWebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, token });
             }
             catch (Exception ex)
             {
@@ -340,5 +335,6 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 
             return false;
         }
+
     }
 }
