@@ -71,7 +71,9 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                     _logger.LogInformation("New Event Grid Webhook Message Received.");
                 }
 
-                var cts = new CancellationTokenSource();
+                var cancellationToken = context?.RequestAborted ?? CancellationToken.None;
+
+                var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
                 try
                 {
