@@ -3,6 +3,7 @@
 using Bet.AspNetCore.EventGrid.WebApp.Events;
 using Bet.AspNetCore.EventGrid.WebApp.Handler;
 using Bet.AspNetCore.EventGrid.WebApp.Middleware;
+using Bet.AspNetCore.EventGrid.WebApp.Services;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,6 +29,14 @@ namespace Bet.AspNetCore.EventGrid.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IOperationTransient, Operation>();
+            services.AddScoped<IOperationScoped, Operation>();
+            services.AddSingleton<IOperationSingleton, Operation>();
+            services.AddSingleton<IOperationSingletonInstance>(new Operation(Guid.Empty));
+
+            // OperationService depends on each of the other Operation types.
+            services.AddTransient<IOperationService, OperationService>();
+
             services.AddEvenGridWebhooks()
                 .AddViewerHubContext("/hubs/grid")
                 .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")

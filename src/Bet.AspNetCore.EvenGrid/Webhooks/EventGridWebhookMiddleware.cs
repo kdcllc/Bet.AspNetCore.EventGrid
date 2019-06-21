@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Azure.EventGrid;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -20,9 +21,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Bet.AspNetCore.EvenGrid.Webhooks
 {
-    internal class EventGridWebhookMiddleware
+    internal class EventGridWebhookMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
         private readonly IServiceProvider _serviceProvider;
         private readonly IHostingEnvironment _enviroment;
         private readonly ILogger<EventGridWebhookMiddleware> _logger;
@@ -30,14 +30,12 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
         private readonly IHubContext<GridEventsHub> _hubContext;
 
         public EventGridWebhookMiddleware(
-            RequestDelegate next,
             IServiceProvider serviceProvider,
             IHostingEnvironment enviroment,
             IOptions<EventGridWebhooksOptions> options,
             IHubContext<GridEventsHub> gridEventsHubContext,
             ILogger<EventGridWebhookMiddleware> logger)
         {
-            _next = next ?? throw new ArgumentNullException(nameof(next));
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _enviroment = enviroment;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -46,7 +44,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             _hubContext = gridEventsHubContext;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             if (context == null)
             {
@@ -56,7 +54,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             if (context.Request.Path != _options.HttpRoute
                 || context.Request.Method != _options.HttpMethod)
             {
-                await _next(context);
+                await next(context);
                 return;
             }
 
@@ -73,7 +71,9 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                     _logger.LogInformation("New Event Grid Webhook Message Received.");
                 }
 
-                var cts = new CancellationTokenSource();
+                var cancellationToken = context?.RequestAborted ?? CancellationToken.None;
+
+                var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
                 try
                 {
@@ -202,6 +202,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                 {
                     throw new ArgumentException($"Can't find a Event Grid Webhook for this grid event: {@event.EventType}");
                 }
+
 
                 var service = webhook.Factory(_serviceProvider);
 
@@ -336,5 +337,6 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 
             return false;
         }
+
     }
 }
