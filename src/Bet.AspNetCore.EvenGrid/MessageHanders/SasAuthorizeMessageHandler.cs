@@ -28,7 +28,7 @@ namespace Bet.AspNetCore.EvenGrid.MessageHanders
         {
             if (!request.Headers.Contains(_sasHeaderKey) && string.IsNullOrEmpty(_sasToken))
             {
-                _sasToken = BuildSharedAccessSignature(
+                BuildSharedAccessSignature(
                     $"{_options.Endpoint}?api-version=2018-01-01",
                     DateTime.UtcNow + _options.TokenExpiration,
                     _options.Key,
@@ -47,7 +47,7 @@ namespace Bet.AspNetCore.EvenGrid.MessageHanders
             {
                 request.Headers.Remove(_sasHeaderKey);
 
-                _sasToken = BuildSharedAccessSignature(
+                BuildSharedAccessSignature(
                     $"{_options.Endpoint}?api-version=2018-01-01",
                     DateTime.UtcNow + _options.TokenExpiration,
                     _options.Key,
@@ -61,7 +61,7 @@ namespace Bet.AspNetCore.EvenGrid.MessageHanders
             return response;
         }
 
-        private string BuildSharedAccessSignature(
+        private void BuildSharedAccessSignature(
             string resource,
             DateTime expirationUtc,
             string key,
@@ -86,7 +86,7 @@ namespace Bet.AspNetCore.EvenGrid.MessageHanders
                     var encodedSignature = HttpUtility.UrlEncode(signature);
                     var signedSas = $"{unsignedSas}&{Signature}={encodedSignature}";
 
-                    return signedSas;
+                    _sasToken = signedSas;
                 }
             }
             finally
