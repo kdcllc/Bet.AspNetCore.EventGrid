@@ -43,7 +43,7 @@
   <ItemGroup Label="Shared">
     <PackageReference Update="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Update="Microsoft.Azure.EventGrid" Version="3.1.0" />
-    <PackageReference Update="Microsoft.NET.Sdk.Functions" Version="1.0.27" />
+    <PackageReference Update="Microsoft.NET.Sdk.Functions" Version="1.0.29" />
   </ItemGroup>
 
   <ItemGroup Label="SourceLink">
