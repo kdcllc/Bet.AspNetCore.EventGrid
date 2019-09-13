@@ -28,25 +28,25 @@
   </ItemGroup>
 
   <ItemGroup Label="Azure Key Vault">
-    <PackageReference Update="Microsoft.Azure.Services.AppAuthentication" Version="1.0.3"/>
-    <PackageReference Update="Microsoft.Azure.KeyVault" Version="3.0.3" />
+    <PackageReference Update="Microsoft.Azure.Services.AppAuthentication" Version="1.3.1"/>
+    <PackageReference Update="Microsoft.Azure.KeyVault" Version="3.0.4" />
     <PackageReference Update="Microsoft.Extensions.Configuration.AzureKeyVault" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup Label="Unit Tests">
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.0.1" />
-    <PackageReference Update="Moq" Version="4.10.1" />
+    <PackageReference Update="Moq" Version="4.13.0" />
     <PackageReference Update="xunit" Version="2.4.1" />
     <PackageReference Update="xunit.runner.visualstudio" Version="2.4.1" />
   </ItemGroup>
 
   <ItemGroup Label="Shared">
     <PackageReference Update="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Update="Microsoft.Azure.EventGrid" Version="3.1.0" />
     <PackageReference Update="Microsoft.NET.Sdk.Functions" Version="1.0.29" />
+    <PackageReference Update="Microsoft.Azure.EventGrid" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup Label="SourceLink">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All" />
   </ItemGroup>
 </Project>
