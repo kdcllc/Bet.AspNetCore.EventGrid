@@ -9,12 +9,13 @@ using Microsoft.IO;
 
 namespace Bet.AspNetCore.EventGrid.WebApp.Middleware
 {
-    public class RequestResponseLoggingMiddleware
+    internal class RequestResponseLoggingMiddleware
     {
+        private const int ReadChunkBufferLength = 4096;
+
         private readonly RequestDelegate _next;
         private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
         private readonly Action<RequestProfilerModel> _requestResponseHandler;
-        private const int ReadChunkBufferLength = 4096;
 
         public RequestResponseLoggingMiddleware(RequestDelegate next, Action<RequestProfilerModel> requestResponseHandler)
         {
@@ -27,7 +28,7 @@ namespace Bet.AspNetCore.EventGrid.WebApp.Middleware
         {
             var model = new RequestProfilerModel
             {
-                RequestTime = new DateTimeOffset(),
+                RequestTime = default,
                 Context = context,
                 Request = await FormatRequest(context)
             };
@@ -45,9 +46,45 @@ namespace Bet.AspNetCore.EventGrid.WebApp.Middleware
 
                 newResponseBody.Seek(0, SeekOrigin.Begin);
                 model.Response = FormatResponse(context, newResponseBody);
-                model.ResponseTime = new DateTimeOffset();
+                model.ResponseTime = default;
                 _requestResponseHandler(model);
             }
+        }
+
+        public async Task<string> GetRequestBody(HttpRequest request)
+        {
+            request.EnableBuffering();
+            request.EnableRewind();
+            using (var requestStream = _recyclableMemoryStreamManager.GetStream())
+            {
+                await request.Body.CopyToAsync(requestStream);
+                request.Body.Seek(0, SeekOrigin.Begin);
+                return ReadStreamInChunks(requestStream);
+            }
+        }
+
+        private static string ReadStreamInChunks(Stream stream)
+        {
+            stream.Seek(0, SeekOrigin.Begin);
+            string result;
+            using (var textWriter = new StringWriter())
+            using (var reader = new StreamReader(stream))
+            {
+                var readChunk = new char[ReadChunkBufferLength];
+                int readChunkLength;
+
+                // do while: is useful for the last iteration in case readChunkLength < chunkLength
+                do
+                {
+                    readChunkLength = reader.ReadBlock(readChunk, 0, ReadChunkBufferLength);
+                    textWriter.Write(readChunk, 0, readChunkLength);
+                }
+                while (readChunkLength > 0);
+
+                result = textWriter.ToString();
+            }
+
+            return result;
         }
 
         private string FormatResponse(HttpContext context, MemoryStream newResponseBody)
@@ -72,54 +109,9 @@ namespace Bet.AspNetCore.EventGrid.WebApp.Middleware
                         $"Schema:{request.Scheme} {Environment.NewLine}" +
                         $"Host: {request.Host} {Environment.NewLine}" +
                         $"Path: {request.Path} {Environment.NewLine}" +
-                        $"Headers: {string.Join("; ",request.Headers.Select(x=> $"{ x.Key}={x.Value}").ToArray())}" +
+                        $"Headers: {string.Join("; ", request.Headers.Select(x => $"{x.Key}={x.Value}").ToArray())}" +
                         $"QueryString: {request.QueryString} {Environment.NewLine}" +
                         $"Request Body: {await GetRequestBody(request)}";
         }
-
-        public async Task<string> GetRequestBody(HttpRequest request)
-        {
-            request.EnableBuffering();
-            request.EnableRewind();
-            using (var requestStream = _recyclableMemoryStreamManager.GetStream())
-            {
-                await request.Body.CopyToAsync(requestStream);
-                request.Body.Seek(0, SeekOrigin.Begin);
-                return ReadStreamInChunks(requestStream);
-            }
-        }
-
-        private static string ReadStreamInChunks(Stream stream)
-        {
-            stream.Seek(0, SeekOrigin.Begin);
-            string result;
-            using (var textWriter = new StringWriter())
-            using (var reader = new StreamReader(stream))
-            {
-                var readChunk = new char[ReadChunkBufferLength];
-                int readChunkLength;
-                //do while: is useful for the last iteration in case readChunkLength < chunkLength
-                do
-                {
-                    readChunkLength = reader.ReadBlock(readChunk, 0, ReadChunkBufferLength);
-                    textWriter.Write(readChunk, 0, readChunkLength);
-                } while (readChunkLength > 0);
-
-                result = textWriter.ToString();
-            }
-
-            return result;
-        }
-
-
-    }
-
-    public class RequestProfilerModel
-    {
-        public DateTimeOffset RequestTime { get; set; }
-        public HttpContext Context { get; set; }
-        public string Request { get; set; }
-        public string Response { get; set; }
-        public DateTimeOffset ResponseTime { get; set; }
     }
 }

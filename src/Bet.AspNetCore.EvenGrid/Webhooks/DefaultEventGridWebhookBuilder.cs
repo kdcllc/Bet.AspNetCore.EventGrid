@@ -1,17 +1,19 @@
 ﻿using System;
+
 using Bet.AspNetCore.EventGrid.Viewer;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bet.AspNetCore.EvenGrid.Webhooks
 {
     internal class DefaultEventGridWebhookBuilder : IEventGridWebhookBuilder
     {
-        public IServiceCollection Services { get; }
-
         public DefaultEventGridWebhookBuilder(IServiceCollection services)
         {
             Services = services ?? throw new ArgumentNullException(nameof(services));
         }
+
+        public IServiceCollection Services { get; }
 
         /// <summary>
         /// Add Webhook to the collection of the webhooks.
@@ -21,8 +23,8 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
         /// <param name="eventTypeName">The name of the event grid grouping.</param>
         /// <returns></returns>
         public IEventGridWebhookBuilder AddWebhook<TWebhook, TEvent>(string eventTypeName)
-           where TEvent : EventGridWebhookEvent
            where TWebhook : class, IEventGridWebhook<TEvent>
+           where TEvent : EventGridWebhookEvent
         {
             Services.Configure<EventGridWebhooksOptions>(options =>
             {

@@ -5,10 +5,11 @@
 
 The middleware and viewer for Azure Event Grid.
 
-## Required Azure resources:
+## Required Azure resources
 
 1. Azure Event Grid Topic
 2. Azure Web App or App Functions
+3. Azure App Web Service
 
 ## Usage of the Azure Web App WebHooks
 
@@ -93,13 +94,11 @@ To see messages coming in to the middleware.
 What if you want to test the round trip communication locally on your machine. [`ngrok`](https://ngrok.com/?source=kdcllc) to the rescue.
 
 1. Install with `npm i -g ngrok`.
-2. Run `Bet.AspNetCore.EventGrid.WebApp` project on port `5001`
-3. Run `ngrok http https://localhost:5001` (to test function locally run `ngrok http -host-header=localhost 7071`)
+2. Run `Bet.AspNetCore.EventGrid.WebApp` project on port `5201`
+3. Run `ngrok http https://localhost:5201` (to test function locally run `ngrok http -host-header=localhost 7071`)
 ![ngrok](./img/ngrok.server.jpg)
 4. Use the randomly generated URL for EventGrid Webhook. Create Event Subscription
 ![eventgrid topic](./img/eventgrid-topic.jpg)
-
-
 
 ## Reference material
 

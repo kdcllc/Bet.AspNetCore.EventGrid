@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Bet.AspNetCore.EventGrid.WebApp
 {
-    public class Program
+    internal sealed class Program
     {
         public static void Main(string[] args)
         {
@@ -20,12 +20,13 @@ namespace Bet.AspNetCore.EventGrid.WebApp
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
-                        .UseStartup<Startup>()
                         .ConfigureLogging(log =>
                         {
                             log.AddDebug();
                             log.AddConsole();
-                        });
+                        })
+                        .ConfigureKestrel(options => options.AllowSynchronousIO = false)
+                        .UseStartup<Startup>();
         }
     }
 }

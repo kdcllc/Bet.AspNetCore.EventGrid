@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace Bet.AspNetCore.Func
 {
     /// <summary>
-    /// https://docs.microsoft.com/en-us/azure/event-grid/receive-events
+    /// https://docs.microsoft.com/en-us/azure/event-grid/receive-events.
     /// </summary>
     public static class Webhook
     {
@@ -24,7 +24,8 @@ namespace Bet.AspNetCore.Func
             log.LogInformation($"C# HTTP trigger function begun");
             var response = string.Empty;
 
-            var requestContent = await new StreamReader(req.Body).ReadToEndAsync();
+            using var stream = new StreamReader(req.Body);
+            var requestContent = await stream.ReadToEndAsync();
 
             log.LogInformation($"Received events: {requestContent}");
 
@@ -37,8 +38,8 @@ namespace Bet.AspNetCore.Func
                 if (eventGridEvent.Data is SubscriptionValidationEventData eventData)
                 {
                     log.LogInformation($"Got SubscriptionValidation event data, validation code: {eventData.ValidationCode}, topic: {eventGridEvent.Topic}");
-                    // Do any additional validation (as required) and then return back the below response
 
+                    // Do any additional validation (as required) and then return back the below response
                     var responseData = new SubscriptionValidationResponse()
                     {
                         ValidationResponse = eventData.ValidationCode

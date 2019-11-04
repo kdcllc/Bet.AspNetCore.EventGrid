@@ -203,7 +203,6 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                     throw new ArgumentException($"Can't find a Event Grid Webhook for this grid event: {@event.EventType}");
                 }
 
-
                 var service = webhook.Factory(_serviceProvider);
 
                 var method = webhook.WebhookType.GetMethod("ProcessEventAsync");
@@ -212,7 +211,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             }
             catch (Exception ex)
             {
-              result = new EventGridWebHookResult(ex);
+                result = new EventGridWebHookResult(ex);
             }
             finally
             {
@@ -236,6 +235,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             {
                 return result;
             }
+
             return null;
         }
 
@@ -251,7 +251,8 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 
                 object messageEventData = null;
 
-                var webhook = _options.WebHooksRegistrations.FirstOrDefault(x => {
+                var webhook = _options.WebHooksRegistrations.FirstOrDefault(x =>
+                {
                     try
                     {
                         messageEventData = JsonConvert.DeserializeObject(@event.Data.ToString(), x.EventType, new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error });
@@ -294,8 +295,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                         details.Source,
                         details.EventTime,
                         jsonContent,
-                        result?.Exception.Message ?? "success"
-                    );
+                        result?.Exception.Message ?? "success");
                 }
 
                 if (result?.Exception != null)
@@ -303,6 +303,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                     tasksExeptions.Add(result);
                 }
             }
+
             return tasksExeptions;
         }
 
@@ -337,6 +338,5 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 
             return false;
         }
-
     }
 }

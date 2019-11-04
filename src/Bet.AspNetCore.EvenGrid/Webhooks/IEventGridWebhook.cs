@@ -12,9 +12,9 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
         /// <summary>
         /// Processes an event grid event.
         /// </summary>
-        /// <param name="event"></param>
+        /// <param name="webHookEvent"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<EventGridWebHookResult> ProcessEventAsync(T @event, CancellationToken cancellationToken = default);
+        Task<EventGridWebHookResult> ProcessEventAsync(T webHookEvent, CancellationToken cancellationToken = default);
     }
 }

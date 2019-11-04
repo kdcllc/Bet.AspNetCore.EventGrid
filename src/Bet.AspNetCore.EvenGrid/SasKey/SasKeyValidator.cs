@@ -9,8 +9,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Bet.AspNetCore.EvenGrid.SasKey
 {
-    namespace AzureEventGridSimulator.Middleware
-    {
         public class SasKeyValidator
         {
             private readonly ILogger _logger;
@@ -86,5 +84,4 @@ namespace Bet.AspNetCore.EvenGrid.SasKey
                 }
             }
         }
-    }
 }

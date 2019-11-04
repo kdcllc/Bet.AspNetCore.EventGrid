@@ -17,17 +17,18 @@ using Newtonsoft.Json.Linq;
 
 namespace Broadcaster
 {
-    //https://stackoverflow.com/questions/50120429/what-is-the-key-to-generate-aeg-sas-token
-    class Program
+#pragma warning disable CA2000 // Dispose objects before losing scope
+
+    // https://stackoverflow.com/questions/50120429/what-is-the-key-to-generate-aeg-sas-token
+    internal sealed class Program
     {
         private static readonly string Key = Environment.GetEnvironmentVariable("EVENT_GRID_KEY");
         private static readonly string Endpoint = Environment.GetEnvironmentVariable("EVENT_GRID_URL");
 
-        static  async Task Main(string[] args)
+        internal static async Task Main(string[] args)
         {
-            //await TaskSendEventWithEventGridClient();
-
-             await SendEventWithHttpClient();
+            // await TaskSendEventWithEventGridClient();
+            await SendEventWithHttpClient();
         }
 
         private static async Task SendEventWithHttpClient()
@@ -50,7 +51,8 @@ namespace Broadcaster
             Console.WriteLine($"Sending: {content}");
 
             var client = new HttpClient(new SasAuthorizeMessageHandler(new SasAuthorizeOptions(
-                Endpoint, Key, TimeSpan.FromMinutes(8))) { InnerHandler = new HttpClientHandler() });
+                Endpoint, Key, TimeSpan.FromMinutes(8)))
+            { InnerHandler = new HttpClientHandler() });
 
             var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
             var result = await client.PostAsync(Endpoint, httpContent);
@@ -94,4 +96,6 @@ namespace Broadcaster
             public string Id { get; set; }
         }
     }
+#pragma warning restore CA2000 // Dispose objects before losing scope
+
 }

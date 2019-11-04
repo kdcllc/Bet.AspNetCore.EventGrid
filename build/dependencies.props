@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-    <NetCoreCommonVersion>3.0.0-preview4*</NetCoreCommonVersion>
+    <NetCoreCommonVersion>3.0.0</NetCoreCommonVersion>
   </PropertyGroup>
 
   <ItemGroup Label="NetCore">
@@ -44,6 +44,10 @@
     <PackageReference Update="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Update="Microsoft.NET.Sdk.Functions" Version="1.0.29" />
     <PackageReference Update="Microsoft.Azure.EventGrid" Version="3.2.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Analyzers">
+    <PackageReference Include="Bet.CodeAnalyzers" Version="1.0.6" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Label="SourceLink">

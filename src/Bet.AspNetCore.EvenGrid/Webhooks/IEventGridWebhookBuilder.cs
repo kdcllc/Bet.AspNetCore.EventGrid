@@ -24,7 +24,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
         /// <summary>
         /// Adds SignalR hub to be used with the Viewer.
         /// </summary>
-        /// <param name="httpRoute">The default values is '/hubs/gridevents'</param>
+        /// <param name="httpRoute">The default values is '/hubs/gridevents'.</param>
         /// <returns></returns>
         IEventGridWebhookBuilder AddViewerHubContext(string httpRoute = "/hubs/gridevents");
     }

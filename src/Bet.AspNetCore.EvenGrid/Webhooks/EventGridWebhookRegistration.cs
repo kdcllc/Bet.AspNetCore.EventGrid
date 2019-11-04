@@ -4,6 +4,8 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 {
     internal class EventGridWebhookRegistration
     {
+        private Func<IServiceProvider, object> _factory;
+
         public EventGridWebhookRegistration(
             string eventGridType,
             Func<IServiceProvider, object> factory,
@@ -21,8 +23,6 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
         public Type EventType { get; }
 
         public Type WebhookType { get; }
-
-        private Func<IServiceProvider, object> _factory;
 
         public Func<IServiceProvider, object> Factory
         {

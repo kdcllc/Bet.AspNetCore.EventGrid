@@ -15,8 +15,11 @@
         }
 
         public IOperationTransient TransientOperation { get; }
+
         public IOperationScoped ScopedOperation { get; }
+
         public IOperationSingleton SingletonOperation { get; }
+
         public IOperationSingletonInstance SingletonInstanceOperation { get; }
     }
 }

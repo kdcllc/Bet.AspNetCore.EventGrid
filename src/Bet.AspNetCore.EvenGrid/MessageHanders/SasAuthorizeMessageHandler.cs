@@ -12,10 +12,9 @@ namespace Bet.AspNetCore.EvenGrid.MessageHanders
 {
     public class SasAuthorizeMessageHandler : DelegatingHandler
     {
+        private const string SasHeaderKey = "aeg-sas-token";
+
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
-
-        private const string _sasHeaderKey = "aeg-sas-token";
-
         private readonly SasAuthorizeOptions _options;
         private string _sasToken;
 
@@ -26,7 +25,7 @@ namespace Bet.AspNetCore.EvenGrid.MessageHanders
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (!request.Headers.Contains(_sasHeaderKey) && string.IsNullOrEmpty(_sasToken))
+            if (!request.Headers.Contains(SasHeaderKey) && string.IsNullOrEmpty(_sasToken))
             {
                 BuildSharedAccessSignature(
                     $"{_options.Endpoint}?api-version=2018-01-01",
@@ -35,7 +34,7 @@ namespace Bet.AspNetCore.EvenGrid.MessageHanders
                     cancellationToken);
             }
 
-            request.Headers.Add(_sasHeaderKey, _sasToken);
+            request.Headers.Add(SasHeaderKey, _sasToken);
 
             var response = await base.SendAsync(request, cancellationToken);
 
@@ -45,7 +44,7 @@ namespace Bet.AspNetCore.EvenGrid.MessageHanders
             }
 
             {
-                request.Headers.Remove(_sasHeaderKey);
+                request.Headers.Remove(SasHeaderKey);
 
                 BuildSharedAccessSignature(
                     $"{_options.Endpoint}?api-version=2018-01-01",
@@ -53,7 +52,7 @@ namespace Bet.AspNetCore.EvenGrid.MessageHanders
                     _options.Key,
                     cancellationToken);
 
-                request.Headers.Add(_sasHeaderKey, _sasToken);
+                request.Headers.Add(SasHeaderKey, _sasToken);
 
                 response = await base.SendAsync(request, cancellationToken);
             }

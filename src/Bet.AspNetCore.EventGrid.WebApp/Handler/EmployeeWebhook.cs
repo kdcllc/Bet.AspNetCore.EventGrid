@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Bet.AspNetCore.EvenGrid.Webhooks;
 using Bet.AspNetCore.EventGrid.WebApp.Events;
 using Bet.AspNetCore.EventGrid.WebApp.Services;
+
 using Microsoft.Extensions.Logging;
 
 namespace Bet.AspNetCore.EventGrid.WebApp.Handler
@@ -28,7 +29,6 @@ namespace Bet.AspNetCore.EventGrid.WebApp.Handler
                 $"Singleton Instance Id: {_service.SingletonInstanceOperation.OperationId}{Environment.NewLine}");
 
             // var data = @event as EmployeeCreatedEvent;
-
             _logger.LogInformation("Executing: {data} ", @event);
 
             return Task.FromResult<EventGridWebHookResult>(null);
