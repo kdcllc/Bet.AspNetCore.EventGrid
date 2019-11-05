@@ -16,5 +16,7 @@ namespace Bet.AspNetCore.EvenGrid.Models
         /// Gets an <see cref="Exception"/> representing the exception that was thrown when checking for status (if any).
         /// </summary>
         public Exception? Exception { get; }
+
+        public string? Message { get; set; }
     }
 }

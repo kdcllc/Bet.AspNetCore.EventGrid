@@ -59,43 +59,39 @@ namespace Bet.AspNetCore.EvenGrid.Internal
                 return;
             }
 
-            using (var streamReader = new HttpRequestStreamReader(context.Request.Body, Encoding.UTF8))
+            // create a new cancelation token
+            var cancellationToken = context?.RequestAborted ?? CancellationToken.None;
+            var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
+            try
             {
-                var jsonContent = await streamReader.ReadToEndAsync();
+                using (var streamReader = new HttpRequestStreamReader(context?.Request.Body, Encoding.UTF8))
+                {
+                    using var jsonReader = new JsonTextReader(streamReader);
+                    var jToken = await JToken.LoadAsync(jsonReader, cts.Token);
 
-                if (_logger.IsEnabled(LogLevel.Debug))
-                {
-                    _logger.LogDebug($"New Event Grid Webhook Message Received.{Environment.NewLine}Body: {{MessageBody}}", jsonContent);
-                }
-                else
-                {
                     _logger.LogInformation("New Event Grid Webhook Message Received.");
-                }
 
-                var cancellationToken = context?.RequestAborted ?? CancellationToken.None;
-
-                var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-
-                try
-                {
                     var tasksExeptions = new List<WebHookResult>();
 
-                    if (_options.EventTypeSubscriptionValidation(context))
+                    if (_options.EventTypeSubscriptionValidation(context!))
                     {
-                        var validationResult = await HandleValidation(jsonContent);
+                        var validationResult = await HandleValidation(jToken);
                         response.ContentType = "application/json";
                         response.StatusCode = StatusCodes.Status200OK;
                         await response.WriteAsync(validationResult);
                     }
-                    else if (_options.EventTypeNotification(context))
+                    else if (_options.EventTypeNotification(context!))
                     {
-                        if (IsCloudEvent(jsonContent))
+                        var events = GetEvents(jToken);
+
+                        if (events != null)
                         {
-                            tasksExeptions = await HandleCloudEvent(jsonContent, cts.Token);
+                            tasksExeptions = await ProcessEvents(events, cts.Token);
                         }
                         else
                         {
-                            tasksExeptions = await HandleGridEvents(jsonContent, cts.Token);
+                            tasksExeptions.Add(new WebHookResult(new Exception("No Webhook Events were found")));
                         }
 
                         if (tasksExeptions.Count > 0
@@ -112,15 +108,23 @@ namespace Bet.AspNetCore.EvenGrid.Internal
                         }
                     }
                 }
-                finally
-                {
-                    cts?.Dispose();
-                }
+            }
+            catch (Exception ex)
+            {
+                cts.Cancel();
+                _logger.LogError(ex, string.Empty);
+                throw;
+            }
+            finally
+            {
+                cts?.Dispose();
             }
         }
 
-        private async Task<string> HandleValidation(string jsonContent)
+        private async Task<string> HandleValidation(JToken jToken)
         {
+            var jsonContent = jToken.ToString();
+
             var gridEvent = JsonConvert.DeserializeObject<List<GridEvent<Dictionary<string, string>>>>(jsonContent).First();
 
             if (_options.ViewerHubContextEnabled)
@@ -144,27 +148,13 @@ namespace Bet.AspNetCore.EvenGrid.Internal
             });
         }
 
-        private async Task<List<WebHookResult>> HandleGridEvents(string jsonContent, CancellationToken token)
+        private async Task<List<WebHookResult>> ProcessEvents(JArray events, CancellationToken token)
         {
             var tasksExeptions = new List<WebHookResult>();
 
-            var jToken = JToken.Parse(jsonContent);
-
-            if (jToken is JArray)
+            foreach (var jtEvent in events)
             {
-                var events = JArray.Parse(jsonContent);
-                foreach (var jtEvent in events)
-                {
-                    var result = await ProcessGridEvent(jtEvent, token);
-                    if (result != null)
-                    {
-                        tasksExeptions.Add(result);
-                    }
-                }
-            }
-            else if (jToken is JObject)
-            {
-                var result = await ProcessGridEvent(jToken, token);
+                var result = await ProcessSingleEvent(jtEvent, token);
                 if (result != null)
                 {
                     tasksExeptions.Add(result);
@@ -174,12 +164,12 @@ namespace Bet.AspNetCore.EvenGrid.Internal
             return tasksExeptions;
         }
 
-        private async Task<WebHookResult?> ProcessGridEvent(JToken jtEvent, CancellationToken token)
+        private async Task<WebHookResult?> ProcessSingleEvent(JToken jtToken, CancellationToken token)
         {
             WebHookResult? result = null;
             try
             {
-                var @event = JsonConvert.DeserializeObject<GridEvent<object>>(jtEvent.ToString());
+                var singleEvent = JsonConvert.DeserializeObject<GridEvent<object>>(jtToken.ToString());
 
                 object? messageEventData = null;
 
@@ -187,19 +177,24 @@ namespace Bet.AspNetCore.EvenGrid.Internal
                 {
                     try
                     {
-                        messageEventData = JsonConvert.DeserializeObject(@event.Data.ToString(), x.EventType, new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error });
+                        messageEventData = JsonConvert.DeserializeObject(
+                            singleEvent.Data.ToString(),
+                            x.EventType,
+                            new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error });
                     }
                     catch
                     {
                         return false;
                     }
 
-                    return messageEventData != null && x.EventType == messageEventData.GetType() && x.EventGridType == @event.EventType;
+                    return messageEventData != null
+                        && x.EventType == messageEventData.GetType()
+                        && x.EventGridType == singleEvent.EventType;
                 });
 
                 if (webhook == null)
                 {
-                    throw new ArgumentException($"Can't find a Event Grid Webhook for this grid event: {@event.EventType}");
+                    throw new ArgumentException($"Can't find a Event Grid Webhook for this grid event: {singleEvent.EventType}");
                 }
 
                 var service = webhook.Factory(_serviceProvider);
@@ -218,14 +213,14 @@ namespace Bet.AspNetCore.EvenGrid.Internal
                 {
                     // Invoke a method on the clients for
                     // an event grid notification.
-                    var details = JsonConvert.DeserializeObject<GridEvent<dynamic>>(jtEvent.ToString());
+                    var details = JsonConvert.DeserializeObject<GridEvent<dynamic>>(jtToken.ToString());
                     await _hubContext.Clients.All.SendAsync(
                         "gridupdate",
                         details.Id,
                         details.EventType,
                         details.Subject,
                         details.EventTime.DateTime.ToLongTimeString(),
-                        jtEvent.ToString(),
+                        jtToken.ToString(),
                         result?.Exception?.Message ?? "success");
                 }
             }
@@ -238,107 +233,23 @@ namespace Bet.AspNetCore.EvenGrid.Internal
             return null;
         }
 
-        private async Task<List<WebHookResult>> HandleCloudEvent(string jsonContent, CancellationToken token)
+        private JArray? GetEvents(JToken inputJtoken)
         {
-            var tasksExeptions = new List<WebHookResult>();
-
-            WebHookResult? result = null;
-
-            try
+            if (inputJtoken is JArray)
             {
-                var @event = JsonConvert.DeserializeObject<CloudEvent<object>>(jsonContent);
-
-                object? messageEventData = null;
-
-                var webhook = _options.WebHooksRegistrations.FirstOrDefault(x =>
-                {
-                    try
-                    {
-                        messageEventData = JsonConvert.DeserializeObject(
-                            @event.Data.ToString(),
-                            x.EventType,
-                            new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error });
-                    }
-                    catch
-                    {
-                        return false;
-                    }
-
-                    return messageEventData != null && x.EventType == messageEventData.GetType() && x.EventGridType == @event.EventType;
-                });
-
-                if (webhook == null)
-                {
-                    throw new ArgumentException($"Can't find a Event Grid Webhook for this grid event: {@event.EventType}");
-                }
-
-                var service = webhook.Factory(_serviceProvider);
-
-                var method = webhook.WebhookType.GetMethod("ProcessEventAsync");
-
-                result = await (Task<WebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, token });
+                return inputJtoken as JArray;
             }
-            catch (Exception ex)
+            else if (inputJtoken is JObject)
             {
-                tasksExeptions.Add(new WebHookResult(ex));
-            }
-            finally
-            {
-                if (_options.ViewerHubContextEnabled)
+                var jarr = new JArray
                 {
-                    var details = JsonConvert.DeserializeObject<CloudEvent<dynamic>>(jsonContent);
+                    inputJtoken
+                };
 
-                    // CloudEvents schema and mapping to
-                    // Event Grid: https://docs.microsoft.com/en-us/azure/event-grid/cloudevents-schema
-                    await _hubContext.Clients.All.SendAsync(
-                        "gridupdate",
-                        details.EventId,
-                        details.EventType,
-                        details.Source,
-                        details.EventTime,
-                        jsonContent,
-                        result?.Exception?.Message ?? "success");
-                }
-
-                if (result?.Exception != null)
-                {
-                    tasksExeptions.Add(result);
-                }
+                return jarr;
             }
 
-            return tasksExeptions;
-        }
-
-        private bool IsCloudEvent(string jsonContent)
-        {
-            // Cloud events are sent one at a time, while Grid events
-            // are sent in an array. As a result, the JObject.Parse will
-            // fail for Grid events.
-            try
-            {
-                var jToken = JToken.Parse(jsonContent);
-
-                if (jToken is JArray)
-                {
-                    return false;
-                }
-
-                // Attempt to read one JSON object.
-                var eventData = JObject.Parse(jsonContent);
-
-                // Check for the cloud events version property.
-                var version = eventData["cloudEventsVersion"]?.Value<string>();
-                if (!string.IsNullOrEmpty(version))
-                {
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred {methodName}", nameof(IsCloudEvent));
-            }
-
-            return false;
+            return null;
         }
     }
 }
