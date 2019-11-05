@@ -15,6 +15,9 @@
     <PackageReference Update="Microsoft.AspNetCore.Http" Version="$(NetCoreCommonVersion)" />
     <PackageReference Update="Microsoft.AspNetCore.Mvc" Version="$(NetCoreCommonVersion)" />
     <PackageReference Update="Microsoft.AspNetCore.StaticFiles" Version="$(NetCoreCommonVersion)" />
+    <PackageReference Update="Microsoft.AspNetCore.Mvc.NewtonsoftJson"  Version="$(NetCoreCommonVersion)"/>
+    <PackageReference Update="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="$(NetCoreCommonVersion)" />
+
     <PackageReference Update="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(NetCoreCommonVersion)" />
     <PackageReference Update="Microsoft.Extensions.FileProviders.Embedded" Version="$(NetCoreCommonVersion)" />
     <PackageReference Update="Microsoft.Extensions.Logging.Abstractions" Version="$(NetCoreCommonVersion)" />
@@ -47,10 +50,10 @@
   </ItemGroup>
 
   <ItemGroup Label="Analyzers">
-    <PackageReference Include="Bet.CodeAnalyzers" Version="1.0.6" PrivateAssets="All" />
+    <PackageReference Include="Bet.CodeAnalyzers" Version="1.0.7" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Label="SourceLink">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19554-01" PrivateAssets="All" />
   </ItemGroup>
 </Project>

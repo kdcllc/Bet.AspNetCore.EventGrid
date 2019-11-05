@@ -7,5 +7,13 @@
         "*.targets": "xml",
         "*.tasks": "xml",
         "Dockerfile*": "dockerfile"
+    },
+
+    "rest-client.fontSize": 14,
+    "rest-client.environmentVariables": {
+        "$shared": {
+            "host": "localhost:5201",
+            "contentType": "application/json"
+        }
     }
 }
