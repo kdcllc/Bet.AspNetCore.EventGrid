@@ -1,5 +1,5 @@
-﻿using Bet.AspNetCore.EvenGrid.SasKey;
-using Bet.AspNetCore.EvenGrid.Webhooks;
+﻿using Bet.AspNetCore.EvenGrid.Internal;
+using Bet.AspNetCore.EvenGrid.SasKey;
 
 using Newtonsoft.Json.Serialization;
 
@@ -15,15 +15,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="method">The HTTP method. The default value is 'POST'.</param>
         /// <param name="throwIfException">Throw exceptions within the middleware. The default is 'true'.</param>
         /// <returns></returns>
-        public static IEventGridWebhookBuilder AddEvenGridWebhooks(
+        public static IWebhooksBuilder AddEvenGridWebhooks(
             this IServiceCollection services,
             string route = "/webhooks",
             string method = "POST",
             bool throwIfException = true)
         {
-            var builder = new DefaultEventGridWebhookBuilder(services);
+            var builder = new WebhookBuilder(services);
 
-            builder.Services.AddTransient<EventGridWebhookMiddleware>();
+            builder.Services.AddTransient<WebhookMiddleware>();
 
             builder.Services.AddSignalR()
                     .AddJsonProtocol(options =>
@@ -32,7 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         new DefaultContractResolver();
                     });
 
-            builder.Services.Configure<EventGridWebhooksOptions>(options =>
+            builder.Services.Configure<WebhooksOptions>(options =>
             {
                 options.HttpRoute = route;
                 options.HttpMethod = method;

@@ -4,15 +4,15 @@ using System.Linq;
 
 using Microsoft.AspNetCore.Http;
 
-namespace Bet.AspNetCore.EvenGrid.Webhooks
+namespace Bet.AspNetCore.EvenGrid.Internal
 {
-    internal class EventGridWebhooksOptions
+    internal class WebhooksOptions
     {
         public Func<HttpContext, bool> EventTypeSubscriptionValidation { get; } = (context) => context.Request.Headers["aeg-event-type"].FirstOrDefault() == "SubscriptionValidation";
 
         public Func<HttpContext, bool> EventTypeNotification { get; } = (context) => context.Request.Headers["aeg-event-type"].FirstOrDefault() == "Notification";
 
-        public ICollection<EventGridWebhookRegistration> WebHooksRegistrations { get; } = new List<EventGridWebhookRegistration>();
+        public ICollection<WebhooksRegistrations> WebHooksRegistrations { get; } = new List<WebhooksRegistrations>();
 
         public string HttpRoute { get; set; } = string.Empty;
 

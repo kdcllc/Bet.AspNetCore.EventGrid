@@ -1,8 +1,8 @@
-﻿using Bet.AspNetCore.EvenGrid.Webhooks;
+﻿using Bet.AspNetCore.EvenGrid.Models;
 
 namespace Bet.AspNetCore.EventGrid.WebApp.Events
 {
-    public class CustomerCreatedEvent : EventGridWebhookEvent
+    public class CustomerCreatedEvent : WebhookEvent
     {
         public string Id { get; set; }
 

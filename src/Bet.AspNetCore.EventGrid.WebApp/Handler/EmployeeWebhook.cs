@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using Bet.AspNetCore.EvenGrid.Models;
 using Bet.AspNetCore.EvenGrid.Webhooks;
 using Bet.AspNetCore.EventGrid.WebApp.Events;
 using Bet.AspNetCore.EventGrid.WebApp.Services;
@@ -21,7 +22,7 @@ namespace Bet.AspNetCore.EventGrid.WebApp.Handler
             _service = service ?? throw new System.ArgumentNullException(nameof(service));
         }
 
-        public Task<EventGridWebHookResult> ProcessEventAsync(EmployeeCreatedEvent @event, CancellationToken cancellationToken = default)
+        public Task<WebHookResult> ProcessEventAsync(EmployeeCreatedEvent @event, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation($"Transient Id: {_service.TransientOperation.OperationId}{Environment.NewLine}" +
                 $"Scoped Id: {_service.ScopedOperation.OperationId}{Environment.NewLine}" +
@@ -31,7 +32,7 @@ namespace Bet.AspNetCore.EventGrid.WebApp.Handler
             // var data = @event as EmployeeCreatedEvent;
             _logger.LogInformation("Executing: {data} ", @event);
 
-            return Task.FromResult<EventGridWebHookResult>(null);
+            return Task.FromResult<WebHookResult>(null);
         }
     }
 }

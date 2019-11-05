@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using Bet.AspNetCore.EvenGrid.Models;
 using Bet.AspNetCore.EvenGrid.Webhooks;
 
 using Microsoft.Extensions.Logging;
@@ -17,13 +18,13 @@ namespace Bet.AspNetCore.EvenGrid.Internal
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task<EventGridWebHookResult> ProcessEventAsync(
+        public Task<WebHookResult> ProcessEventAsync(
             EmployeeCreatedEvent webHookEvent,
             CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("Executing: {data} ", webHookEvent);
 
-            return Task.FromResult(new EventGridWebHookResult());
+            return Task.FromResult(new WebHookResult());
         }
     }
 }

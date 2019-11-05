@@ -1,6 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
+using Bet.AspNetCore.EvenGrid.Models;
+
 namespace Bet.AspNetCore.EvenGrid.Webhooks
 {
     /// <summary>
@@ -15,6 +17,6 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
         /// <param name="webHookEvent"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<EventGridWebHookResult> ProcessEventAsync(T webHookEvent, CancellationToken cancellationToken = default);
+        Task<WebHookResult> ProcessEventAsync(T webHookEvent, CancellationToken cancellationToken = default);
     }
 }

@@ -17,22 +17,22 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Bet.AspNetCore.EvenGrid.Webhooks
+namespace Bet.AspNetCore.EvenGrid.Internal
 {
-    internal class EventGridWebhookMiddleware : IMiddleware
+    internal class WebhookMiddleware : IMiddleware
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IHostingEnvironment _enviroment;
-        private readonly ILogger<EventGridWebhookMiddleware> _logger;
-        private readonly EventGridWebhooksOptions _options;
+        private readonly ILogger<WebhookMiddleware> _logger;
+        private readonly WebhooksOptions _options;
         private readonly IHubContext<GridEventsHub> _hubContext;
 
-        public EventGridWebhookMiddleware(
+        public WebhookMiddleware(
             IServiceProvider serviceProvider,
             IHostingEnvironment enviroment,
-            IOptions<EventGridWebhooksOptions> options,
+            IOptions<WebhooksOptions> options,
             IHubContext<GridEventsHub> gridEventsHubContext,
-            ILogger<EventGridWebhookMiddleware> logger)
+            ILogger<WebhookMiddleware> logger)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _enviroment = enviroment;
@@ -78,7 +78,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 
                 try
                 {
-                    var tasksExeptions = new List<EventGridWebHookResult>();
+                    var tasksExeptions = new List<WebHookResult>();
 
                     if (_options.EventTypeSubscriptionValidation(context))
                     {
@@ -108,7 +108,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                         }
                         else if (_options.ThrowIfException && tasksExeptions.Count > 0)
                         {
-                            throw new AggregateException($"{nameof(EventGridWebhookMiddleware)} raised exceptions.", tasksExeptions.Select(x => x.Exception));
+                            throw new AggregateException($"{nameof(WebhookMiddleware)} raised exceptions.", tasksExeptions.Select(x => x.Exception));
                         }
                     }
                 }
@@ -144,9 +144,9 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             });
         }
 
-        private async Task<List<EventGridWebHookResult>> HandleGridEvents(string jsonContent, CancellationToken token)
+        private async Task<List<WebHookResult>> HandleGridEvents(string jsonContent, CancellationToken token)
         {
-            var tasksExeptions = new List<EventGridWebHookResult>();
+            var tasksExeptions = new List<WebHookResult>();
 
             var jToken = JToken.Parse(jsonContent);
 
@@ -174,9 +174,9 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             return tasksExeptions;
         }
 
-        private async Task<EventGridWebHookResult?> ProcessGridEvent(JToken jtEvent, CancellationToken token)
+        private async Task<WebHookResult?> ProcessGridEvent(JToken jtEvent, CancellationToken token)
         {
-            EventGridWebHookResult? result = null;
+            WebHookResult? result = null;
             try
             {
                 var @event = JsonConvert.DeserializeObject<GridEvent<object>>(jtEvent.ToString());
@@ -206,11 +206,11 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 
                 var method = webhook.WebhookType.GetMethod("ProcessEventAsync");
 
-                result = await (Task<EventGridWebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, token });
+                result = await (Task<WebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, token });
             }
             catch (Exception ex)
             {
-                result = new EventGridWebHookResult(ex);
+                result = new WebHookResult(ex);
             }
             finally
             {
@@ -238,11 +238,11 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             return null;
         }
 
-        private async Task<List<EventGridWebHookResult>> HandleCloudEvent(string jsonContent, CancellationToken token)
+        private async Task<List<WebHookResult>> HandleCloudEvent(string jsonContent, CancellationToken token)
         {
-            var tasksExeptions = new List<EventGridWebHookResult>();
+            var tasksExeptions = new List<WebHookResult>();
 
-            EventGridWebHookResult? result = null;
+            WebHookResult? result = null;
 
             try
             {
@@ -276,11 +276,11 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 
                 var method = webhook.WebhookType.GetMethod("ProcessEventAsync");
 
-                result = await (Task<EventGridWebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, token });
+                result = await (Task<WebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, token });
             }
             catch (Exception ex)
             {
-                tasksExeptions.Add(new EventGridWebHookResult(ex));
+                tasksExeptions.Add(new WebHookResult(ex));
             }
             finally
             {

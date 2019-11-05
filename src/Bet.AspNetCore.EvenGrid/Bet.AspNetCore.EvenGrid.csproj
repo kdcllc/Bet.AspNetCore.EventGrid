@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Bet.AspNetCore.EventGrid.Viewer\Bet.AspNetCore.EventGrid.Viewer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Internal\Tests\" />
+  </ItemGroup>
+
 </Project>

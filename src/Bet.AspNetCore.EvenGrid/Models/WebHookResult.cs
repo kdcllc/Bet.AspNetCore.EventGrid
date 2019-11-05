@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace Bet.AspNetCore.EvenGrid.Webhooks
+namespace Bet.AspNetCore.EvenGrid.Models
 {
     /// <summary>
     /// The result message for the custom event grid webhook processors.
     /// </summary>
-    public class EventGridWebHookResult
+    public class WebHookResult
     {
-        public EventGridWebHookResult(Exception? exception = null)
+        public WebHookResult(Exception? exception = null)
         {
             Exception = exception;
         }

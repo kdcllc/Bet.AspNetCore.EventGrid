@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Bet.AspNetCore.EvenGrid.Webhooks
+namespace Bet.AspNetCore.EvenGrid.Internal
 {
-    internal class EventGridWebhookRegistration
+    internal class WebhooksRegistrations
     {
         private Func<IServiceProvider, object> _factory;
 
-        public EventGridWebhookRegistration(
+        public WebhooksRegistrations(
             string eventGridType,
             Func<IServiceProvider, object> factory,
             Type eventType,

@@ -1,14 +1,16 @@
 ﻿using System;
 
+using Bet.AspNetCore.EvenGrid.Models;
+using Bet.AspNetCore.EvenGrid.Webhooks;
 using Bet.AspNetCore.EventGrid.Viewer;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Bet.AspNetCore.EvenGrid.Webhooks
+namespace Bet.AspNetCore.EvenGrid.Internal
 {
-    internal class DefaultEventGridWebhookBuilder : IEventGridWebhookBuilder
+    internal class WebhookBuilder : IWebhooksBuilder
     {
-        public DefaultEventGridWebhookBuilder(IServiceCollection services)
+        public WebhookBuilder(IServiceCollection services)
         {
             Services = services ?? throw new ArgumentNullException(nameof(services));
         }
@@ -22,13 +24,13 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
         /// <typeparam name="TEvent">The type of the event grid webhook event.</typeparam>
         /// <param name="eventTypeName">The name of the event grid grouping.</param>
         /// <returns></returns>
-        public IEventGridWebhookBuilder AddWebhook<TWebhook, TEvent>(string eventTypeName)
+        public IWebhooksBuilder AddWebhook<TWebhook, TEvent>(string eventTypeName)
            where TWebhook : class, IEventGridWebhook<TEvent>
-           where TEvent : EventGridWebhookEvent
+           where TEvent : WebhookEvent
         {
-            Services.Configure<EventGridWebhooksOptions>(options =>
+            Services.Configure<WebhooksOptions>(options =>
             {
-                options.WebHooksRegistrations.Add(new EventGridWebhookRegistration(
+                options.WebHooksRegistrations.Add(new WebhooksRegistrations(
                     eventTypeName,
                     sp => ActivatorUtilities.GetServiceOrCreateInstance<TWebhook>(sp),
                     typeof(TEvent),
@@ -38,7 +40,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             return this;
         }
 
-        public IEventGridWebhookBuilder AddViewerHubContext(string httpRoute = "/hubs/gridevents")
+        public IWebhooksBuilder AddViewerHubContext(string httpRoute = "/hubs/gridevents")
         {
             Services.ConfigureOptions<DefaultUIConfigureOptions>();
 
@@ -47,7 +49,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                 o.Route = httpRoute;
             });
 
-            Services.Configure<EventGridWebhooksOptions>(options =>
+            Services.Configure<WebhooksOptions>(options =>
             {
                 options.ViewerHubContextEnabled = true;
                 options.ViewerHubContextRoute = httpRoute;

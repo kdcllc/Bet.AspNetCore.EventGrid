@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Bet.AspNetCore.EvenGrid.MessageHanders;
-using Bet.AspNetCore.EvenGrid.Webhooks;
+using Bet.AspNetCore.EvenGrid.Models;
 
 using Microsoft.Azure.EventGrid;
 using Microsoft.Azure.EventGrid.Models;
@@ -91,7 +91,7 @@ namespace Broadcaster
             }
         }
 
-        internal class Employee : EventGridWebhookEvent
+        internal class Employee : WebhookEvent
         {
             public string Id { get; set; }
         }

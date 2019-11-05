@@ -1,8 +1,8 @@
-﻿using Bet.AspNetCore.EvenGrid.Webhooks;
+﻿using Bet.AspNetCore.EvenGrid.Models;
 
 namespace Bet.AspNetCore.EvenGrid.Internal
 {
-    internal class EmployeeCreatedEvent : EventGridWebhookEvent
+    internal class EmployeeCreatedEvent : WebhookEvent
     {
         public string Id { get; set; } = string.Empty;
 

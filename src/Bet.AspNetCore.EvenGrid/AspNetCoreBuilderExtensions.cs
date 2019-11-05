@@ -1,4 +1,5 @@
-﻿using Bet.AspNetCore.EvenGrid.Webhooks;
+﻿using Bet.AspNetCore.EvenGrid.Internal;
+using Bet.AspNetCore.EvenGrid.Models;
 
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +16,7 @@ namespace Microsoft.AspNetCore.Builder
         /// <returns></returns>
         public static IApplicationBuilder UseEventGridWebHooks(this IApplicationBuilder app)
         {
-            var options = app.ApplicationServices.GetRequiredService<IOptions<EventGridWebhooksOptions>>().Value;
+            var options = app.ApplicationServices.GetRequiredService<IOptions<WebhooksOptions>>().Value;
 
             app.MapWhen(context => context.Request.Path.StartsWithSegments(options.HttpRoute), builder =>
             {
@@ -39,7 +40,7 @@ namespace Microsoft.AspNetCore.Builder
 #endif
                 }
 
-                builder.UseMiddleware<EventGridWebhookMiddleware>();
+                builder.UseMiddleware<WebhookMiddleware>();
             });
 
             return app;
