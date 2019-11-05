@@ -1,9 +1,7 @@
-﻿using Bet.AspNetCore.EvenGrid.Models;
-using Bet.AspNetCore.EvenGrid.Webhooks;
+﻿using Bet.AspNetCore.EvenGrid;
+using Bet.AspNetCore.EvenGrid.Models;
 
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Bet.AspNetCore.EvenGrid.Internal
+namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
     /// Event Grid WebHook Builder.

@@ -1,4 +1,4 @@
-﻿using Bet.AspNetCore.EvenGrid.Internal;
+﻿using Bet.AspNetCore.EvenGrid.Internal.Tests;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;

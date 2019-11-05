@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using Bet.AspNetCore.EvenGrid.Models;
 
-namespace Bet.AspNetCore.EvenGrid.Webhooks
+namespace Bet.AspNetCore.EvenGrid
 {
     /// <summary>
     /// An event grid webhook processor interface.

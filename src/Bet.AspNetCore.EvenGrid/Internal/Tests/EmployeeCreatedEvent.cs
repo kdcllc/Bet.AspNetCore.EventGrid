@@ -1,6 +1,6 @@
 ﻿using Bet.AspNetCore.EvenGrid.Models;
 
-namespace Bet.AspNetCore.EvenGrid.Internal
+namespace Bet.AspNetCore.EvenGrid.Internal.Tests
 {
     internal class EmployeeCreatedEvent : WebhookEvent
     {

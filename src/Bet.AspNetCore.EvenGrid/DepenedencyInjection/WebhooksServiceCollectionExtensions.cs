@@ -5,7 +5,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ServiceCollectionExtensions
+    public static class WebhooksServiceCollectionExtensions
     {
         /// <summary>
         /// Adds Event Grid Webhooks middleware configurations.

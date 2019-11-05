@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-using Bet.AspNetCore.EvenGrid.Internal;
+using Bet.AspNetCore.EvenGrid.Internal.Tests;
 using Bet.AspNetCore.EvenGrid.Models;
 
 using Microsoft.AspNetCore.Hosting;

@@ -1,7 +1,6 @@
 ﻿using System;
 
 using Bet.AspNetCore.EvenGrid.Models;
-using Bet.AspNetCore.EvenGrid.Webhooks;
 using Bet.AspNetCore.EventGrid.Viewer;
 
 using Microsoft.Extensions.DependencyInjection;

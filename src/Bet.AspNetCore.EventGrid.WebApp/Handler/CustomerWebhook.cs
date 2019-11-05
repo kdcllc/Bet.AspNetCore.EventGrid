@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
+using Bet.AspNetCore.EvenGrid;
 using Bet.AspNetCore.EvenGrid.Models;
-using Bet.AspNetCore.EvenGrid.Webhooks;
 using Bet.AspNetCore.EventGrid.WebApp.Events;
 
 using Microsoft.Extensions.Logging;
