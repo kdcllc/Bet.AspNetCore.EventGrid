@@ -16,7 +16,7 @@ namespace Bet.AspNetCore.EvenGrid.MessageHanders
 
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
         private readonly SasAuthorizeOptions _options;
-        private string _sasToken;
+        private string _sasToken = string.Empty;
 
         public SasAuthorizeMessageHandler(SasAuthorizeOptions options)
         {

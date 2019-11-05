@@ -11,8 +11,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Azure.EventGrid;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -51,8 +49,11 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (context.Request.Path != _options.HttpRoute
-                || context.Request.Method != _options.HttpMethod)
+            var response = context?.Response;
+
+            if (context?.Request.Path != _options.HttpRoute
+                || context.Request.Method != _options.HttpMethod
+                || response == null)
             {
                 await next(context);
                 return;
@@ -77,11 +78,9 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
 
                 try
                 {
-                    var response = context.Response;
-
                     var tasksExeptions = new List<EventGridWebHookResult>();
 
-                    if (_options.EventTypeSubcriptionValidation(context))
+                    if (_options.EventTypeSubscriptionValidation(context))
                     {
                         var validationResult = await HandleValidation(jsonContent);
                         response.ContentType = "application/json";
@@ -131,7 +130,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                     gridEvent.Id,
                     gridEvent.EventType,
                     gridEvent.Subject,
-                    gridEvent.EventTime.ToLongTimeString(),
+                    gridEvent.EventTime.DateTime.ToLongTimeString(),
                     jsonContent,
                     "success");
             }
@@ -175,14 +174,14 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             return tasksExeptions;
         }
 
-        private async Task<EventGridWebHookResult> ProcessGridEvent(JToken jtEvent, CancellationToken token)
+        private async Task<EventGridWebHookResult?> ProcessGridEvent(JToken jtEvent, CancellationToken token)
         {
-            EventGridWebHookResult result = null;
+            EventGridWebHookResult? result = null;
             try
             {
                 var @event = JsonConvert.DeserializeObject<GridEvent<object>>(jtEvent.ToString());
 
-                object messageEventData = null;
+                object? messageEventData = null;
 
                 var webhook = _options.WebHooksRegistrations.FirstOrDefault(x =>
                 {
@@ -225,9 +224,9 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                         details.Id,
                         details.EventType,
                         details.Subject,
-                        details.EventTime.ToLongTimeString(),
+                        details.EventTime.DateTime.ToLongTimeString(),
                         jtEvent.ToString(),
-                        result?.Exception.Message ?? "success");
+                        result?.Exception?.Message ?? "success");
                 }
             }
 
@@ -243,19 +242,22 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
         {
             var tasksExeptions = new List<EventGridWebHookResult>();
 
-            EventGridWebHookResult result = null;
+            EventGridWebHookResult? result = null;
 
             try
             {
                 var @event = JsonConvert.DeserializeObject<CloudEvent<object>>(jsonContent);
 
-                object messageEventData = null;
+                object? messageEventData = null;
 
                 var webhook = _options.WebHooksRegistrations.FirstOrDefault(x =>
                 {
                     try
                     {
-                        messageEventData = JsonConvert.DeserializeObject(@event.Data.ToString(), x.EventType, new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error });
+                        messageEventData = JsonConvert.DeserializeObject(
+                            @event.Data.ToString(),
+                            x.EventType,
+                            new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error });
                     }
                     catch
                     {
@@ -295,7 +297,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
                         details.Source,
                         details.EventTime,
                         jsonContent,
-                        result?.Exception.Message ?? "success");
+                        result?.Exception?.Message ?? "success");
                 }
 
                 if (result?.Exception != null)

@@ -24,12 +24,12 @@ namespace Bet.AspNetCore.EvenGrid.MessageHanders
         /// <summary>
         /// The Event Grid base address.
         /// </summary>
-        public string Endpoint { get; set; }
+        public string Endpoint { get; set; } = string.Empty;
 
         /// <summary>
         /// The Event Grid Authentication Key.
         /// </summary>
-        public string Key { get; set; }
+        public string Key { get; set; } = string.Empty;
 
         /// <summary>
         /// The Expiration for the SAS Token. The default is 15 minutes.

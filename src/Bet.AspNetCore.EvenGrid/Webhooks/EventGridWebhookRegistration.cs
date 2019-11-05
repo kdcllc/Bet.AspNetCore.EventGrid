@@ -13,7 +13,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
             Type webhookType)
         {
             EventGridType = eventGridType;
-            Factory = factory ?? throw new ArgumentNullException(nameof(factory));
+            _factory = factory ?? throw new ArgumentNullException(nameof(factory));
             EventType = eventType ?? throw new ArgumentNullException(nameof(eventType));
             WebhookType = webhookType ?? throw new ArgumentNullException(nameof(webhookType));
         }

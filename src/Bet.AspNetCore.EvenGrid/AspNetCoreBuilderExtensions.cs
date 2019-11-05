@@ -24,7 +24,7 @@ namespace Microsoft.AspNetCore.Builder
                     app.UseStaticFiles();
 
                     app.UseWebSockets();
-
+#if NETSTANDARD2_0
                     app.UseSignalR((configure) =>
                     {
                         var desiredTransports =
@@ -36,6 +36,7 @@ namespace Microsoft.AspNetCore.Builder
                             opt.Transports = desiredTransports;
                         });
                     });
+#endif
                 }
 
                 builder.UseMiddleware<EventGridWebhookMiddleware>();
