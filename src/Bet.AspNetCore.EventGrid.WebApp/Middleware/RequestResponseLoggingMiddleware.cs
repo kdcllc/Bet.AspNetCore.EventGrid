@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.IO;
 
 namespace Bet.AspNetCore.EventGrid.WebApp.Middleware
@@ -54,7 +53,6 @@ namespace Bet.AspNetCore.EventGrid.WebApp.Middleware
         public async Task<string> GetRequestBody(HttpRequest request)
         {
             request.EnableBuffering();
-            request.EnableRewind();
             using (var requestStream = _recyclableMemoryStreamManager.GetStream())
             {
                 await request.Body.CopyToAsync(requestStream);

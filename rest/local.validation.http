@@ -1,0 +1,19 @@
+
+# tests codes for local validation request that event grid sends to the webhookd
+POST https://{{host}}/webhooks
+Content-Type: {{contentType}}
+aeg-event-type: SubscriptionValidation
+
+[{
+  "id": "f7d1c646-59f0-435a-bff6-595f26057a4b",
+  "topic": "/subscriptions/123/resourceGroups/rs-gp/providers/Microsoft.EventGrid/topics/eg-topic",
+  "subject": "",
+  "data": {
+    "validationCode": "E831AD6B-2C61-4DEF-BA86-4E3405211DB7",
+    "validationUrl": "https://rp2-centralus.eventgrid.azure.net:553/eventsubscriptions/eventgrid-webapp/validate?id=E831AD6B-2C61-4DEF-BA86-4E3405211DB7&t=2019-04-30T00:37:39.4620510Z&apiVersion=2018-09-15-preview&token=OL9EfrablMN3EPlBNn0q1k%2flD1uDK8z5QZKX3DVcyEc%3d"
+  },
+  "eventType": "Microsoft.EventGrid.SubscriptionValidationEvent",
+  "eventTime": "2019-04-30T00:37:39.462051Z",
+  "metadataVersion": "1",
+  "dataVersion": "2"
+}]

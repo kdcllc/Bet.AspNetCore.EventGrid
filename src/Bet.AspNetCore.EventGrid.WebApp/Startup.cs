@@ -37,12 +37,16 @@ namespace Bet.AspNetCore.EventGrid.WebApp
             // OperationService depends on each of the other Operation types.
             services.AddTransient<IOperationService, OperationService>();
 
+            services.AddSignalR()
+                    .AddNewtonsoftJsonProtocol()
+                    .AddJsonProtocol(options => options.PayloadSerializerOptions.PropertyNamingPolicy = null);
+
             services.AddEvenGridWebhooks()
                 .AddViewerHubContext("/hubs/grid")
                 .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
                 .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(r => r.EnableEndpointRouting = false).AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

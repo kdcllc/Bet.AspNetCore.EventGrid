@@ -25,7 +25,7 @@ namespace Bet.AspNetCore.EventGrid.WebApp
                             log.AddDebug();
                             log.AddConsole();
                         })
-                        .ConfigureKestrel(options => options.AllowSynchronousIO = false)
+                        //.ConfigureKestrel(options => options.AllowSynchronousIO = false)
                         .UseStartup<Startup>();
         }
     }
