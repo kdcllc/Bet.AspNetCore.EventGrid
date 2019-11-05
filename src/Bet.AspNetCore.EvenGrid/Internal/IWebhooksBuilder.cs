@@ -20,7 +20,7 @@ namespace Bet.AspNetCore.EvenGrid.Internal
         /// <param name="eventTypeName">The name of the event grid grouping.</param>
         /// <returns></returns>
         IWebhooksBuilder AddWebhook<TWebHook, TEvent>(string eventTypeName)
-            where TWebHook : class, IEventGridWebhook<TEvent>
+            where TWebHook : class, IWebhook<TEvent>
             where TEvent : WebhookEvent;
 
         /// <summary>

@@ -21,7 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
             string method = "POST",
             bool throwIfException = true)
         {
-            var builder = new WebhookBuilder(services);
+            var builder = new WebhooksBuilder(services);
 
             builder.Services.AddTransient<WebhookMiddleware>();
 

@@ -25,13 +25,13 @@ namespace Bet.AspNetCore.EvenGrid.Internal
         private readonly IHostingEnvironment _enviroment;
         private readonly ILogger<WebhookMiddleware> _logger;
         private readonly WebhooksOptions _options;
-        private readonly IHubContext<GridEventsHub> _hubContext;
+        private readonly IHubContext<WebhooksSignalRHub> _hubContext;
 
         public WebhookMiddleware(
             IServiceProvider serviceProvider,
             IHostingEnvironment enviroment,
             IOptions<WebhooksOptions> options,
-            IHubContext<GridEventsHub> gridEventsHubContext,
+            IHubContext<WebhooksSignalRHub> gridEventsHubContext,
             ILogger<WebhookMiddleware> logger)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));

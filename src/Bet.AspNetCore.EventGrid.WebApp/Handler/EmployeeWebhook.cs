@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Bet.AspNetCore.EventGrid.WebApp.Handler
 {
-    public class EmployeeWebhook : IEventGridWebhook<EmployeeCreatedEvent>
+    public class EmployeeWebhook : IWebhook<EmployeeCreatedEvent>
     {
         private readonly ILogger<EmployeeWebhook> _logger;
         private readonly IOperationService _service;

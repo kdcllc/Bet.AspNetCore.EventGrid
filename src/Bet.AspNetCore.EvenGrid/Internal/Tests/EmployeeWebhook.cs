@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Bet.AspNetCore.EvenGrid.Internal
 {
-    internal class EmployeeWebhook : IEventGridWebhook<EmployeeCreatedEvent>
+    internal class EmployeeWebhook : IWebhook<EmployeeCreatedEvent>
     {
         private readonly ILogger<EmployeeWebhook> _logger;
 

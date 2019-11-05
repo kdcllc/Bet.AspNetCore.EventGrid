@@ -32,7 +32,7 @@ namespace Microsoft.AspNetCore.Builder
                             HttpTransportType.WebSockets |
                             HttpTransportType.LongPolling;
 
-                        configure.MapHub<GridEventsHub>(options.ViewerHubContextRoute, (opt) =>
+                        configure.MapHub<WebhooksSignalRHub>(options.ViewerHubContextRoute, (opt) =>
                         {
                             opt.Transports = desiredTransports;
                         });

@@ -2,9 +2,9 @@
 
 namespace Bet.AspNetCore.EvenGrid.Models
 {
-    public class GridEventsHub : Hub
+    internal class WebhooksSignalRHub : Hub
     {
-        public GridEventsHub()
+        public WebhooksSignalRHub()
         {
         }
     }

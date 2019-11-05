@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Bet.AspNetCore.EventGrid.WebApp.Handler
 {
-    public class CustomerWebhook : IEventGridWebhook<CustomerCreatedEvent>
+    public class CustomerWebhook : IWebhook<CustomerCreatedEvent>
     {
         private readonly ILogger<CustomerWebhook> _logger;
 

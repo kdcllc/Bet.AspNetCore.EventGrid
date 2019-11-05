@@ -9,7 +9,7 @@ namespace Bet.AspNetCore.EvenGrid.Webhooks
     /// An event grid webhook processor interface.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IEventGridWebhook<T>
+    public interface IWebhook<T>
     {
         /// <summary>
         /// Processes an event grid event.
