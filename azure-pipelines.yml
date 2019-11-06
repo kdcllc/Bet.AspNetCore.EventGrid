@@ -22,6 +22,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: publish
+    projects: '**/*.csproj'
     publishWebProjects: True
     arguments: '-f netcoreapp3.0 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
@@ -34,14 +35,15 @@ steps:
 
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: $(azureSubscription)
+    azureSubscription: 'DreamSpark'
     appType: 'webApp'
     appName: 'bet-eventgrid'
     package: '$(System.DefaultWorkingDirectory)/**/*.zip'
     deploymentMethod: 'auto'
+
 - task: AzureFunctionApp@1
   inputs:
-    azureSubscription: $(azureSubscription)
+    azureSubscription: 'DreamSpark'
     appType: 'functionApp'
     appName: 'bet-dream-func'
     package: '$(System.DefaultWorkingDirectory)/**/*.zip'
