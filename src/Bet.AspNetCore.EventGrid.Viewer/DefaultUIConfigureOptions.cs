@@ -8,9 +8,9 @@ using Microsoft.Extensions.Options;
 
 namespace Bet.AspNetCore.EventGrid.Viewer
 {
-    public class DefaultUIConfigureOptions
-        : IPostConfigureOptions<StaticFileOptions>
+    public class DefaultUIConfigureOptions : IPostConfigureOptions<StaticFileOptions>
     {
+#if NETSTANDARD2_0
         public DefaultUIConfigureOptions(IHostingEnvironment environment)
         {
             Environment = environment;
@@ -18,6 +18,15 @@ namespace Bet.AspNetCore.EventGrid.Viewer
 
         public IHostingEnvironment Environment { get; }
 
+#else
+        public DefaultUIConfigureOptions(IWebHostEnvironment environment)
+        {
+            Environment = environment;
+        }
+
+        public IWebHostEnvironment Environment { get; }
+
+#endif
         public void PostConfigure(string name, StaticFileOptions options)
         {
             name = name ?? throw new ArgumentNullException(nameof(name));

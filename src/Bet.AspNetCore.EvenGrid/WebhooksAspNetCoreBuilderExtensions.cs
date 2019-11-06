@@ -1,13 +1,11 @@
 ﻿using Bet.AspNetCore.EvenGrid.Internal;
-using Bet.AspNetCore.EvenGrid.Models;
 
-using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace Microsoft.AspNetCore.Builder
 {
-    public static class AspNetCoreBuilderExtensions
+    public static class WebhooksAspNetCoreBuilderExtensions
     {
         /// <summary>
         /// Use Event Grid WebHooks middleware.
@@ -22,22 +20,7 @@ namespace Microsoft.AspNetCore.Builder
             {
                 if (options.ViewerHubContextEnabled)
                 {
-                    app.UseStaticFiles();
-
-                    app.UseWebSockets();
-#if NETSTANDARD2_0
-                    app.UseSignalR((configure) =>
-                    {
-                        var desiredTransports =
-                            HttpTransportType.WebSockets |
-                            HttpTransportType.LongPolling;
-
-                        configure.MapHub<WebhooksSignalRHub>(options.ViewerHubContextRoute, (opt) =>
-                        {
-                            opt.Transports = desiredTransports;
-                        });
-                    });
-#endif
+                    app.UseEventGridWebHooksViewer(options.ViewerHubContextRoute);
                 }
 
                 builder.UseMiddleware<WebhookMiddleware>();

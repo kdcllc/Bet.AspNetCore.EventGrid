@@ -6,11 +6,14 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Bet.AspNetCore.EvenGrid.Models;
+using Bet.AspNetCore.EventGrid.Viewer;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -22,24 +25,33 @@ namespace Bet.AspNetCore.EvenGrid.Internal
     internal class WebhookMiddleware : IMiddleware
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IHostingEnvironment _enviroment;
+#if NETSTANDARD2_0 || NETCOREAPP2_2
+        private readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment _enviroment;
+#else
+        private readonly IWebHostEnvironment _enviroment;
+#endif
         private readonly ILogger<WebhookMiddleware> _logger;
         private readonly WebhooksOptions _options;
-        private readonly IHubContext<WebhooksSignalRHub> _hubContext;
+        private readonly IHubContext<WebhooksSignalRHub>? _hubContext;
 
         public WebhookMiddleware(
             IServiceProvider serviceProvider,
-            IHostingEnvironment enviroment,
             IOptions<WebhooksOptions> options,
-            IHubContext<WebhooksSignalRHub> gridEventsHubContext,
             ILogger<WebhookMiddleware> logger)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-            _enviroment = enviroment;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _options = options.Value;
 
-            _hubContext = gridEventsHubContext;
+            // the singular is not always registered and doesn't have to be injected into constructor.
+            _hubContext = _serviceProvider.GetService<IHubContext<WebhooksSignalRHub>>();
+
+#if NETSTANDARD2_0 || NETCOREAPP2_2
+            _enviroment = _serviceProvider.GetRequiredService<Microsoft.AspNetCore.Hosting.IHostingEnvironment>();
+#else
+            _enviroment = _serviceProvider.GetRequiredService<IWebHostEnvironment>();
+#endif
+
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -59,7 +71,7 @@ namespace Bet.AspNetCore.EvenGrid.Internal
                 return;
             }
 
-            // create a new cancelation token
+            // create a new cancellation token
             var cancellationToken = context?.RequestAborted ?? CancellationToken.None;
             var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
@@ -76,7 +88,7 @@ namespace Bet.AspNetCore.EvenGrid.Internal
 
                     if (_options.EventTypeSubscriptionValidation(context!))
                     {
-                        var validationResult = await HandleValidation(jToken);
+                        var validationResult = await HandleValidation(jToken, cts.Token);
                         response.ContentType = "application/json";
                         response.StatusCode = StatusCodes.Status200OK;
                         await response.WriteAsync(validationResult);
@@ -121,13 +133,14 @@ namespace Bet.AspNetCore.EvenGrid.Internal
             }
         }
 
-        private async Task<string> HandleValidation(JToken jToken)
+        private async Task<string> HandleValidation(JToken jToken, CancellationToken cancellationToken)
         {
             var jsonContent = jToken.ToString();
 
             var gridEvent = JsonConvert.DeserializeObject<List<GridEvent<Dictionary<string, string>>>>(jsonContent).First();
 
-            if (_options.ViewerHubContextEnabled)
+            if (_options.ViewerHubContextEnabled
+                && _hubContext != null)
             {
                 await _hubContext.Clients.All.SendAsync(
                     "gridupdate",
@@ -136,7 +149,8 @@ namespace Bet.AspNetCore.EvenGrid.Internal
                     gridEvent.Subject,
                     gridEvent.EventTime.DateTime.ToLongTimeString(),
                     jsonContent,
-                    "success");
+                    "success",
+                    cancellationToken);
             }
 
             // Retrieve the validation code and echo back.
@@ -148,13 +162,13 @@ namespace Bet.AspNetCore.EvenGrid.Internal
             });
         }
 
-        private async Task<List<WebHookResult>> ProcessEvents(JArray events, CancellationToken token)
+        private async Task<List<WebHookResult>> ProcessEvents(JArray events, CancellationToken cancellationToken)
         {
             var tasksExeptions = new List<WebHookResult>();
 
             foreach (var jtEvent in events)
             {
-                var result = await ProcessSingleEvent(jtEvent, token);
+                var result = await ProcessSingleEvent(jtEvent, cancellationToken);
                 if (result != null)
                 {
                     tasksExeptions.Add(result);
@@ -164,7 +178,7 @@ namespace Bet.AspNetCore.EvenGrid.Internal
             return tasksExeptions;
         }
 
-        private async Task<WebHookResult?> ProcessSingleEvent(JToken jtToken, CancellationToken token)
+        private async Task<WebHookResult?> ProcessSingleEvent(JToken jtToken, CancellationToken cancellationToken)
         {
             WebHookResult? result = null;
             try
@@ -201,7 +215,7 @@ namespace Bet.AspNetCore.EvenGrid.Internal
 
                 var method = webhook.WebhookType.GetMethod("ProcessEventAsync");
 
-                result = await (Task<WebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, token });
+                result = await (Task<WebHookResult>)method.Invoke(service, parameters: new object[] { messageEventData, cancellationToken });
             }
             catch (Exception ex)
             {
@@ -209,7 +223,8 @@ namespace Bet.AspNetCore.EvenGrid.Internal
             }
             finally
             {
-                if (_options.ViewerHubContextEnabled)
+                if (_options.ViewerHubContextEnabled
+                    && _hubContext != null)
                 {
                     // Invoke a method on the clients for
                     // an event grid notification.
@@ -221,7 +236,8 @@ namespace Bet.AspNetCore.EvenGrid.Internal
                         details.Subject,
                         details.EventTime.DateTime.ToLongTimeString(),
                         jtToken.ToString(),
-                        result?.Exception?.Message ?? "success");
+                        result?.Exception?.Message ?? "success",
+                        cancellationToken);
                 }
             }
 

@@ -17,13 +17,15 @@ The middleware and viewer for Azure Event Grid.
 
 ```csharp
 
-    services.AddEvenGridWebhooks()
-                .AddViewerHubContext()
-                .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
-                .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
+      services.AddEvenGridWebhooks()
+          .AddViewerSignalRHubContext("/hubs/events")
+          .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
+          .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
 
-    // enable Azure Grid Event Viewer
-    services.AddEventGridViewer();
+      var builder = services.AddEvenGridWebhooks();
+      builder.AddViewerSignalRHubContext("/hubs/events");
+      builder.AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee");
+      builder.AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
 ```
 
 2. Add Middleware
@@ -38,20 +40,22 @@ The middleware and viewer for Azure Event Grid.
 
 ```csharp
 
-public class CustomerWebhook : IEventGridWebhook<CustomerCreatedEvent>
+    public class EmployeeWebhook : IWebhook<EmployeeCreatedEvent>
     {
-        private readonly ILogger<CustomerWebhook> _logger;
+        private readonly ILogger<EmployeeWebhook> _logger;
 
-        public CustomerWebhook(ILogger<CustomerWebhook> logger)
+        public EmployeeWebhook(ILogger<EmployeeWebhook> logger)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task<EventGridWebHookResult> ProcessEventAsync(CustomerCreatedEvent @event, CancellationToken cancellationToken = default)
+        public Task<WebHookResult> ProcessEventAsync(
+            EmployeeCreatedEvent webHookEvent,
+            CancellationToken cancellationToken = default)
         {
-            _logger.LogInformation("Executing: {data} ", @event);
+            _logger.LogInformation("Executing: {data} ", webHookEvent);
 
-            return Task.FromResult<EventGridWebHookResult>(null);
+            return Task.FromResult(new WebHookResult());
         }
     }
 ```
@@ -60,7 +64,7 @@ public class CustomerWebhook : IEventGridWebhook<CustomerCreatedEvent>
 
 To see messages coming in to the middleware.
 
-> https://localhost:5001/events/viewer
+> https://localhost:5201/events/viewer
 
 ## Test Data for Bet.AspNetCore.EventGrid.WebApp project
 

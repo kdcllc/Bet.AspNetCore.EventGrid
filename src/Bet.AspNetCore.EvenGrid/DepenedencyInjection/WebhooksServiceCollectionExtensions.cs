@@ -1,8 +1,6 @@
 ﻿using Bet.AspNetCore.EvenGrid.Internal;
 using Bet.AspNetCore.EvenGrid.SasKey;
 
-using Newtonsoft.Json.Serialization;
-
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class WebhooksServiceCollectionExtensions
@@ -24,13 +22,6 @@ namespace Microsoft.Extensions.DependencyInjection
             var builder = new WebhooksBuilder(services);
 
             builder.Services.AddTransient<WebhookMiddleware>();
-
-            builder.Services.AddSignalR()
-                    .AddJsonProtocol(options =>
-                    {
-                        options.PayloadSerializerSettings.ContractResolver =
-                        new DefaultContractResolver();
-                    });
 
             builder.Services.Configure<WebhooksOptions>(options =>
             {

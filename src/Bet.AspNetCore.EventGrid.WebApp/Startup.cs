@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Bet.AspNetCore.EventGrid.WebApp
@@ -36,12 +37,8 @@ namespace Bet.AspNetCore.EventGrid.WebApp
             // OperationService depends on each of the other Operation types.
             services.AddTransient<IOperationService, OperationService>();
 
-            services.AddSignalR()
-                    .AddNewtonsoftJsonProtocol()
-                    .AddJsonProtocol(options => options.PayloadSerializerOptions.PropertyNamingPolicy = null);
-
             services.AddEvenGridWebhooks()
-                .AddViewerHubContext("/hubs/grid")
+                .AddViewerSignalRHubContext("/hubs/events")
                 .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
                 .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
 
@@ -49,7 +46,7 @@ namespace Bet.AspNetCore.EventGrid.WebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             Action<RequestProfilerModel> requestResponseHandler = requestProfilerModel =>
             {

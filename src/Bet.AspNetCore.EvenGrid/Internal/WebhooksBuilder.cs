@@ -39,14 +39,9 @@ namespace Bet.AspNetCore.EvenGrid.Internal
             return this;
         }
 
-        public IWebhooksBuilder AddViewerHubContext(string httpRoute = "/hubs/gridevents")
+        public IWebhooksBuilder AddViewerSignalRHubContext(string httpRoute = "/hubs/gridevents")
         {
-            Services.ConfigureOptions<DefaultUIConfigureOptions>();
-
-            Services.Configure<ViewerOptions>(o =>
-            {
-                o.Route = httpRoute;
-            });
+            Services.AddViewerSignalR(httpRoute);
 
             Services.Configure<WebhooksOptions>(options =>
             {

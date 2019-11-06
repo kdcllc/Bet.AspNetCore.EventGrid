@@ -26,6 +26,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="httpRoute">The default values is '/hubs/gridevents'.</param>
         /// <returns></returns>
-        IWebhooksBuilder AddViewerHubContext(string httpRoute = "/hubs/gridevents");
+        IWebhooksBuilder AddViewerSignalRHubContext(string httpRoute = "/hubs/gridevents");
     }
 }
