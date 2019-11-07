@@ -37,7 +37,7 @@ steps:
     projects: '**/Bet.AspNetCore.EventGrid.WebApp/**/*.csproj'
     publishWebProjects: false
     #arguments: '-f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
+    arguments: '-f netcoreapp3.0 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
     modifyOutputPath: true
     zipAfterPublish: true
 
