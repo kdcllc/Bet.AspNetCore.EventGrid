@@ -22,9 +22,9 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: publish
-    projects: '**/*.csproj'
+    projects: '/src/Bet.AspNetCore.EventGrid.WebApp/Bet.AspNetCore.EventGrid.WebApp.csproj'
     publishWebProjects: True
-    arguments: '-f netcoreapp3.0 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    arguments: '-f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
 
 # this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
@@ -38,13 +38,13 @@ steps:
     azureSubscription: 'DreamSpark'
     appType: 'webApp'
     appName: 'bet-eventgrid'
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
     deploymentMethod: 'auto'
 
-- task: AzureFunctionApp@1
-  inputs:
-    azureSubscription: 'DreamSpark'
-    appType: 'functionApp'
-    appName: 'bet-dream-func'
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    deploymentMethod: 'auto'
+# - task: AzureFunctionApp@1
+#   inputs:
+#     azureSubscription: 'DreamSpark'
+#     appType: 'functionApp'
+#     appName: 'bet-dream-func'
+#     package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+#     deploymentMethod: 'auto'
