@@ -37,17 +37,11 @@ steps:
     projects: '**/Bet.AspNetCore.EventGrid.WebApp/**/*.csproj'
     publishWebProjects: false
     #arguments: '-f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
-    arguments: '--configuration $(BuildConfiguration) --output publish_webapp'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
     modifyOutputPath: true
     zipAfterPublish: true
 
-- task: ArchiveFiles@2
-  displayName: "Archive WebApp files"
-  inputs:
-    rootFolderOrFile: "$(System.DefaultWorkingDirectory)/publish_webapp"
-    includeRootFolder: false
-    archiveFile: "$(Build.ArtifactStagingDirectory)/app/build$(Build.BuildId).zip"
-
+# https://github.com/microsoft/azure-pipelines-tasks/issues/11444#issuecomment-535671385 (Issue with the deployment)
 - task: AzureWebApp@1
   displayName: Deploy WebApp
   inputs:
