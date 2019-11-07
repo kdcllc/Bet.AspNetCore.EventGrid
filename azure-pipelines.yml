@@ -1,3 +1,7 @@
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/targets/webapp?view=azure-devops&tabs=yaml
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops
+
 trigger:
 - master
 
@@ -28,7 +32,8 @@ steps:
     command: publish
     projects: '**/Bet.AspNetCore.EventGrid.WebApp/**/*.csproj'
     publishWebProjects: false
-    arguments: '-f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
+    #arguments: '-f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
+    arguments: '-f netcoreapp3.0 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
     zipAfterPublish: True
 
 - task: AzureWebApp@1
@@ -46,7 +51,7 @@ steps:
     command: publish
     projects: '**/Bet.AspNetCore.Func/**/*.csproj'
     publishWebProjects: false
-    arguments: '-f netcoreapp2.2 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/func'
+    arguments: '-f netcoreapp2.1 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/func'
     zipAfterPublish: True
 
 - task: AzureFunctionApp@1
