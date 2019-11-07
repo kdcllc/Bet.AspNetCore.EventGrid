@@ -51,7 +51,7 @@ steps:
     command: publish
     projects: '**/Bet.AspNetCore.Func/**/*.csproj'
     publishWebProjects: false
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/func'
+    arguments: '--configuration $(BuildConfiguration) /p:DeployOnBuild="true" --output $(Build.ArtifactStagingDirectory)/func'
     zipAfterPublish: True
 
 - task: AzureFunctionApp@1
