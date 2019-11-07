@@ -9,42 +9,52 @@ variables:
 
 steps:
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: restore
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: build
+    projects: '**/*.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
+
 - task: UseDotNet@2
   displayName: 'Use dotnet sdk 3.x'
   inputs:
     version: 3.x
     includePreviewVersions: true
 
-- task: UseDotNet@2
-  inputs:
-    version: '2.2.x'
-
 - task: DotNetCoreCLI@2
   inputs:
     command: publish
-    projects: '/src/Bet.AspNetCore.EventGrid.WebApp/Bet.AspNetCore.EventGrid.WebApp.csproj'
+    projects: '$(System.DefaultWorkingDirectory)/src/Bet.AspNetCore.EventGrid.WebApp/Bet.AspNetCore.EventGrid.WebApp.csproj'
     publishWebProjects: True
-    arguments: '-f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    arguments: '-f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
     zipAfterPublish: True
-
-# this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    artifactName: 'myWebsiteName'
 
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'DreamSpark'
     appType: 'webApp'
     appName: 'bet-eventgrid'
-    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    package: '$(Build.ArtifactStagingDirectory)/app/**/*.zip'
     deploymentMethod: 'auto'
 
-# - task: AzureFunctionApp@1
-#   inputs:
-#     azureSubscription: 'DreamSpark'
-#     appType: 'functionApp'
-#     appName: 'bet-dream-func'
-#     package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
-#     deploymentMethod: 'auto'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: publish
+    projects: '$(System.DefaultWorkingDirectory)/src/Bet.AspNetCore.Func/Bet.AspNetCore.Func.csproj'
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/func'
+    zipAfterPublish: True
+
+- task: AzureFunctionApp@1
+  inputs:
+    azureSubscription: 'DreamSpark'
+    appType: 'functionApp'
+    appName: 'bet-dream-func'
+    package: '$(Build.ArtifactStagingDirectory)/func/**/*.zip'
+    deploymentMethod: 'auto'
