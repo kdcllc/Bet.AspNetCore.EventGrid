@@ -25,6 +25,7 @@ namespace Bet.AspNetCore.EventGrid.WebApp
                             log.AddDebug();
                             log.AddConsole();
                         })
+                        .UseIIS()
                         .UseStartup<Startup>();
         }
     }
