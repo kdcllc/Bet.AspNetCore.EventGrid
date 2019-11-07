@@ -26,8 +26,9 @@ steps:
   displayName: Publish WebApp
   inputs:
     command: publish
+    projects: '**/Bet.AspNetCore.EventGrid.WebApp/**/*.csproj'
     publishWebProjects: True
-    arguments: 'src/Bet.AspNetCore.EventGrid.WebApp/Bet.AspNetCore.EventGrid.WebApp.csproj -f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
+    arguments: '-f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
     zipAfterPublish: True
 
 - task: AzureWebApp@1
@@ -43,8 +44,9 @@ steps:
   displayName: Publish Func
   inputs:
     command: publish
+    projects: '**/Bet.AspNetCore.Func/**/*.csproj'
     publishWebProjects: True
-    arguments: 'src/Bet.AspNetCore.Func/Bet.AspNetCore.Func.csproj -f netcoreapp2.2 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/func'
+    arguments: '-f netcoreapp2.2 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/func'
     zipAfterPublish: True
 
 - task: AzureFunctionApp@1
