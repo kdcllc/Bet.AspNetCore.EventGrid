@@ -19,14 +19,14 @@ steps:
   inputs:
     command: build
     projects: '*.sln'
-    arguments: '--configuration $(BuildConfiguration) --no-restore'
+    arguments: '-r win-x86 --configuration $(BuildConfiguration) --no-restore'
 
 - task: DotNetCoreCLI@2
   inputs:
     command: publish
     projects: 'src/Bet.AspNetCore.EventGrid.WebApp/Bet.AspNetCore.EventGrid.WebApp.csproj'
     publishWebProjects: True
-    arguments: '--no-restore -f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
+    arguments: '--no-build --no-restore -f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
     zipAfterPublish: True
 
 - task: AzureWebApp@1
