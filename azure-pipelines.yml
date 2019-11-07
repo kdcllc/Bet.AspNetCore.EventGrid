@@ -24,7 +24,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: publish
-    projects: src/Bet.AspNetCore.EventGrid.WebApp/Bet.AspNetCore.EventGrid.WebApp.csproj
+    projects: '*.sln'
     publishWebProjects: True
     arguments: '-f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
     zipAfterPublish: True
@@ -40,7 +40,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: publish
-    projects: src/Bet.AspNetCore.Func/Bet.AspNetCore.Func.csproj
+    projects: '*.sln'
     publishWebProjects: True
     arguments: '-f netcoreapp2.2 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/func'
     zipAfterPublish: True
