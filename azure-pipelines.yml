@@ -10,26 +10,28 @@ variables:
 steps:
 
 - task: DotNetCoreCLI@2
+  displayName: Restore Solution
   inputs:
     command: restore
     projects: '*.sln'
 
 - task: DotNetCoreCLI@2
-  displayName: Build
+  displayName: Build Solution
   inputs:
     command: build
     projects: '*.sln'
     arguments: '--configuration $(BuildConfiguration) --no-restore'
 
 - task: DotNetCoreCLI@2
+  displayName: Publish WebApp
   inputs:
     command: publish
-    projects: '*.sln'
     publishWebProjects: True
-    arguments: '-f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
+    arguments: 'src/Bet.AspNetCore.EventGrid.WebApp/Bet.AspNetCore.EventGrid.WebApp.csproj -f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
     zipAfterPublish: True
 
 - task: AzureWebApp@1
+  displayName: Deploy WebApp
   inputs:
     azureSubscription: 'DreamSpark'
     appType: 'webApp'
@@ -38,14 +40,15 @@ steps:
     deploymentMethod: 'auto'
 
 - task: DotNetCoreCLI@2
+  displayName: Publish Func
   inputs:
     command: publish
-    projects: '*.sln'
     publishWebProjects: True
-    arguments: '-f netcoreapp2.2 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/func'
+    arguments: 'src/Bet.AspNetCore.Func/Bet.AspNetCore.Func.csproj -f netcoreapp2.2 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/func'
     zipAfterPublish: True
 
 - task: AzureFunctionApp@1
+  displayName: Deploy Func
   inputs:
     azureSubscription: 'DreamSpark'
     appType: 'functionApp'
