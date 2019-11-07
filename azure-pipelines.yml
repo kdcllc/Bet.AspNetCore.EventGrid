@@ -12,27 +12,21 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: restore
-    projects: '**/*.csproj'
+    projects: '*.sln'
 
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
     command: build
-    projects: '**/*.csproj'
-    arguments: '--configuration $(BuildConfiguration)'
-
-- task: UseDotNet@2
-  displayName: 'Use dotnet sdk 3.x'
-  inputs:
-    version: 3.x
-    includePreviewVersions: true
+    projects: '*.sln'
+    arguments: '--configuration $(BuildConfiguration) --no-restore'
 
 - task: DotNetCoreCLI@2
   inputs:
     command: publish
-    projects: '$(System.DefaultWorkingDirectory)/src/Bet.AspNetCore.EventGrid.WebApp/Bet.AspNetCore.EventGrid.WebApp.csproj'
+    projects: 'src/Bet.AspNetCore.EventGrid.WebApp/Bet.AspNetCore.EventGrid.WebApp.csproj'
     publishWebProjects: True
-    arguments: '-f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
+    arguments: '--no-build --no-restore -f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
     zipAfterPublish: True
 
 - task: AzureWebApp@1
@@ -46,7 +40,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: publish
-    projects: '$(System.DefaultWorkingDirectory)/src/Bet.AspNetCore.Func/Bet.AspNetCore.Func.csproj'
+    projects: 'src/Bet.AspNetCore.Func/Bet.AspNetCore.Func.csproj'
     publishWebProjects: True
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/func'
     zipAfterPublish: True
