@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp3.0</TargetFrameworks>
-    <GenerateEmbeddedFilesManifest>True</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -10,8 +9,13 @@
     <PackageTags>aspnetcore, dotnetcore, azure, event grid, viewer</PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <GenerateEmbeddedFilesManifest>false</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
@@ -28,12 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="wwwroot\**\*" />
-    <Content Update="**\*.cshtml" Pack="false" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
+    <EmbeddedResource Include="wwwroot/**/*" Pack="true"/>
+    <Content Update="**/*.cshtml" Pack="false" />
   </ItemGroup>
 
 </Project>

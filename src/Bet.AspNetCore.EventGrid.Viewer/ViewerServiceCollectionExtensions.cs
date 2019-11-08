@@ -12,6 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
             string httpRoute = "/hubs/gridevents")
         {
 #if NETSTANDARD2_0
+
             services.AddSignalR()
                 .AddJsonProtocol(options =>
             {
@@ -20,7 +21,8 @@ namespace Microsoft.Extensions.DependencyInjection
             });
 #else
             services.AddSignalR();
-            services.AddRazorPages();
+            services.AddRazorPages()
+                .AddRazorRuntimeCompilation();
 #endif
             services.ConfigureOptions<DefaultUIConfigureOptions>();
 
