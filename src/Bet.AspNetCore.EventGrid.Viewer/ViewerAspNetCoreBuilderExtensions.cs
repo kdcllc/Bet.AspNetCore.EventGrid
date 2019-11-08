@@ -8,7 +8,6 @@ namespace Microsoft.AspNetCore.Builder
     {
         public static IApplicationBuilder UseEventGridWebHooksViewer(this IApplicationBuilder app, string viewerHubContextRoute)
         {
-            app.UseStaticFiles();
             app.UseWebSockets();
 
             var desiredTransports =
@@ -24,7 +23,6 @@ namespace Microsoft.AspNetCore.Builder
                     opt => opt.Transports = desiredTransports);
             });
 #else
-            app.UseFileServer();
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapHub<WebhooksSignalRHub>(
                 viewerHubContextRoute,

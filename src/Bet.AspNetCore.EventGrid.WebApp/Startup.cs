@@ -16,12 +16,9 @@ namespace Bet.AspNetCore.EventGrid.WebApp
 {
     public class Startup
     {
-        private readonly ILogger<Startup> _logger;
-
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _logger = logger;
         }
 
         public IConfiguration Configuration { get; }
@@ -46,13 +43,15 @@ namespace Bet.AspNetCore.EventGrid.WebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            var logger = loggerFactory.CreateLogger<Startup>();
+
             Action<RequestProfilerModel> requestResponseHandler = requestProfilerModel =>
             {
-                _logger.LogInformation(requestProfilerModel.Request);
-                _logger.LogInformation(Environment.NewLine);
-                _logger.LogInformation(requestProfilerModel.Response);
+                logger.LogInformation(requestProfilerModel.Request);
+                logger.LogInformation(Environment.NewLine);
+                logger.LogInformation(requestProfilerModel.Response);
             };
             app.UseMiddleware<RequestResponseLoggingMiddleware>(requestResponseHandler);
 
@@ -65,6 +64,8 @@ namespace Bet.AspNetCore.EventGrid.WebApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseStaticFiles();
 
             app.UseEventGridWebHooks();
 
