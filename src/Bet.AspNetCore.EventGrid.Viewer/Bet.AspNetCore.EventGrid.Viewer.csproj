@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>Azure Event Grid Viewer.</Description>
-    <PackageTags>aspnetcore, dotnetcore, azure, event grid, viewer</PackageTags>
+    <Description>AspNetCore EventGrid Debug Viewer.</Description>
+    <PackageTags>aspnetcore, dotnetcore, azure, azure event grid, webhooks, grid viewer</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">

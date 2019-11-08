@@ -1,17 +1,17 @@
 ﻿using System;
 
-namespace Bet.AspNetCore.EvenGrid.MessageHanders
+namespace Bet.AspNetCore.EvenGrid.MessageHandlers
 {
     /// <summary>
-    /// Options configurations for the <see cref="SasAuthorizeMessageHandler"/>.
+    /// Options configurations for the <see cref="SasAuthorizeDelegatingHandler"/>.
     /// </summary>
-    public class SasAuthorizeOptions
+    public class SasAuthorizeDelegatingHandlerOptions
     {
-        public SasAuthorizeOptions()
+        public SasAuthorizeDelegatingHandlerOptions()
         {
         }
 
-        public SasAuthorizeOptions(string endpoint, string key, TimeSpan? tokenExpiration = null)
+        public SasAuthorizeDelegatingHandlerOptions(string endpoint, string key, TimeSpan? tokenExpiration = null)
         {
             Endpoint = endpoint;
             Key = key;

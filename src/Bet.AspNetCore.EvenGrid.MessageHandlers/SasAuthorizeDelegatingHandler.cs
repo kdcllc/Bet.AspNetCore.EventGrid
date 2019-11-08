@@ -8,17 +8,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Bet.AspNetCore.EvenGrid.MessageHanders
+namespace Bet.AspNetCore.EvenGrid.MessageHandlers
 {
-    public class SasAuthorizeMessageHandler : DelegatingHandler
+    public class SasAuthorizeDelegatingHandler : DelegatingHandler
     {
         private const string SasHeaderKey = "aeg-sas-token";
 
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
-        private readonly SasAuthorizeOptions _options;
+        private readonly SasAuthorizeDelegatingHandlerOptions _options;
         private string _sasToken = string.Empty;
 
-        public SasAuthorizeMessageHandler(SasAuthorizeOptions options)
+        public SasAuthorizeDelegatingHandler(SasAuthorizeDelegatingHandlerOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }

@@ -3,8 +3,7 @@
     "Broadcaster": {
       "commandName": "Project",
       "environmentVariables": {
-        "EVENT_GRID_URL": "https://bet-eg-topic.centralus-1.eventgrid.azure.net/api/events",
-        "EVENT_GRID_KEY": "ZjjG6vS7WPxXPo4N5ZPGXV4j02iblVYHGNf/mmLn0wk="
+
       }
     }
   }

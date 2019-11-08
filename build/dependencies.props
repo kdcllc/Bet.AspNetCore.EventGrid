@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <NetCoreCommonVersion>2.2.*</NetCoreCommonVersion>
+    <BetCommon>1.5.0</BetCommon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2' Or '$(TargetFramework)' == 'netstandard2.0'">
@@ -32,6 +33,7 @@
     <PackageReference Update="Microsoft.Extensions.Options.DataAnnotations" Version="$(NetCoreCommonVersion)" />
     <PackageReference Update="Microsoft.Extensions.Primitives" Version="$(NetCoreCommonVersion)" />
     <PackageReference Update="Microsoft.Extensions.Http.Polly" Version="$(NetCoreCommonVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Hosting" Version="$(NetCoreCommonVersion)" />
   </ItemGroup>
 
   <ItemGroup Label="Azure Key Vault">
@@ -52,6 +54,11 @@
     <PackageReference Update="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Update="Microsoft.NET.Sdk.Functions" Version="1.0.29" />
     <PackageReference Update="Microsoft.Azure.EventGrid" Version="3.2.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Bet">
+    <PackageReference Update="Bet.Extensions.AzureVault" Version="$(BetCommon)" />
+    <PackageReference Update="Bet.Extensions.Logging" Version="$(BetCommon)" />
   </ItemGroup>
 
   <ItemGroup Label="Analyzers">

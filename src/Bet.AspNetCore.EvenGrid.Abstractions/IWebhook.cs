@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-using Bet.AspNetCore.EvenGrid.Models;
+using Bet.AspNetCore.EvenGrid.Abstractions.Models;
 
-namespace Bet.AspNetCore.EvenGrid
+namespace Bet.AspNetCore.EvenGrid.Abstractions
 {
     /// <summary>
     /// An event grid webhook processor interface.

@@ -1,4 +1,5 @@
-# Bet.AspNetCore.EventGrid solution
+# Bet.AspNetCore.EventGrid Webhooks
+
 [![Build status](https://ci.appveyor.com/api/projects/status/ldg53oxk7nrmroo1/branch/master?svg=true)](https://ci.appveyor.com/project/kdcllc/bet-aspnetcore-eventgrid/branch/master)
 [![NuGet](https://img.shields.io/nuget/v/Bet.AspNetCore.EvenGrid.svg)](https://www.nuget.org/packages?q=Bet.AspNetCore.EvenGrid)
 [![MyGet](https://img.shields.io/myget/kdcllc/v/Bet.AspNetCore.EvenGrid.svg?label=myget)](https://www.myget.org/F/kdcllc/api/v2)

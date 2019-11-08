@@ -2,11 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-using Bet.AspNetCore.EvenGrid.Models;
+using Bet.AspNetCore.EvenGrid.Abstractions.Models;
 
 using Microsoft.Extensions.Logging;
 
-namespace Bet.AspNetCore.EvenGrid.Internal.Tests
+namespace Bet.AspNetCore.EvenGrid.Abstractions.Internal.Tests
 {
     internal class EmployeeWebhook : IWebhook<EmployeeCreatedEvent>
     {

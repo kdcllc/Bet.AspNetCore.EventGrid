@@ -39,7 +39,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0C82CDD9-2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EventGrid.UnitTest", "test\Bet.AspNetCore.EventGrid.UnitTest\Bet.AspNetCore.EventGrid.UnitTest.csproj", "{997C8442-80DC-4299-A200-9C0CD6F6A0B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "src\Benchmarks\Benchmarks.csproj", "{7692573F-608A-4776-8C35-A17615DD3267}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "src\Benchmarks\Benchmarks.csproj", "{7692573F-608A-4776-8C35-A17615DD3267}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EvenGrid.MessageHandlers", "src\Bet.AspNetCore.EvenGrid.MessageHandlers\Bet.AspNetCore.EvenGrid.MessageHandlers.csproj", "{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bet.AspNetCore.EvenGrid.Abstractions", "src\Bet.AspNetCore.EvenGrid.Abstractions\Bet.AspNetCore.EvenGrid.Abstractions.csproj", "{5DBD7B46-742A-4130-B18B-D198B0B7DD2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +79,14 @@ Global
 		{7692573F-608A-4776-8C35-A17615DD3267}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7692573F-608A-4776-8C35-A17615DD3267}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7692573F-608A-4776-8C35-A17615DD3267}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DBD7B46-742A-4130-B18B-D198B0B7DD2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DBD7B46-742A-4130-B18B-D198B0B7DD2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DBD7B46-742A-4130-B18B-D198B0B7DD2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DBD7B46-742A-4130-B18B-D198B0B7DD2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +99,8 @@ Global
 		{F9B50267-D2C3-4BA9-AED6-5AC4839AA021} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
 		{997C8442-80DC-4299-A200-9C0CD6F6A0B5} = {0C82CDD9-26A3-43A9-A4BE-13667D165BCB}
 		{7692573F-608A-4776-8C35-A17615DD3267} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
+		{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
+		{5DBD7B46-742A-4130-B18B-D198B0B7DD2A} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {749D7EF8-C2B7-4314-A7B2-850C63C5C3BC}

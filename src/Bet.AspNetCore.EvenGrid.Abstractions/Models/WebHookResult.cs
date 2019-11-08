@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bet.AspNetCore.EvenGrid.Models
+namespace Bet.AspNetCore.EvenGrid.Abstractions.Models
 {
     /// <summary>
     /// The result message for the custom event grid webhook processors.

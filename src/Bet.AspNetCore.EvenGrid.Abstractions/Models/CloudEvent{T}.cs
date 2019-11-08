@@ -2,7 +2,7 @@
 
 using Newtonsoft.Json;
 
-namespace Bet.AspNetCore.EvenGrid.Models
+namespace Bet.AspNetCore.EvenGrid.Abstractions.Models
 {
     /// <summary>
     /// Azure Cloud Event.

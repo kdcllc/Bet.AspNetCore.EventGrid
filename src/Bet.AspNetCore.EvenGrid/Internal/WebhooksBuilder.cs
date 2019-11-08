@@ -1,7 +1,7 @@
 ﻿using System;
 
-using Bet.AspNetCore.EvenGrid.Models;
-using Bet.AspNetCore.EventGrid.Viewer;
+using Bet.AspNetCore.EvenGrid.Abstractions;
+using Bet.AspNetCore.EvenGrid.Abstractions.Models;
 
 using Microsoft.Extensions.DependencyInjection;
 

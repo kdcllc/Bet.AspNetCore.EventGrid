@@ -1,4 +1,4 @@
-﻿using Bet.AspNetCore.EvenGrid.Models;
+﻿using Bet.AspNetCore.EvenGrid.Abstractions.Models;
 
 namespace Bet.AspNetCore.EventGrid.WebApp.Events
 {

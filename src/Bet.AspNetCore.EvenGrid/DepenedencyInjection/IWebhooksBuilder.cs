@@ -1,5 +1,5 @@
-﻿using Bet.AspNetCore.EvenGrid;
-using Bet.AspNetCore.EvenGrid.Models;
+﻿using Bet.AspNetCore.EvenGrid.Abstractions;
+using Bet.AspNetCore.EvenGrid.Abstractions.Models;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

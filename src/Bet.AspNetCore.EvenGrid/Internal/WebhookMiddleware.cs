@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Bet.AspNetCore.EvenGrid.Models;
+using Bet.AspNetCore.EvenGrid.Abstractions.Models;
 using Bet.AspNetCore.EventGrid.Viewer;
 
 using Microsoft.AspNetCore.Hosting;

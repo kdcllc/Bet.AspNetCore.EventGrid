@@ -4,8 +4,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-using Bet.AspNetCore.EvenGrid.Internal.Tests;
-using Bet.AspNetCore.EvenGrid.Models;
+using Bet.AspNetCore.EvenGrid.Abstractions.Internal.Tests;
+using Bet.AspNetCore.EvenGrid.Abstractions.Models;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
