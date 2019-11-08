@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 using BenchmarkDotNet.Attributes;
 
-using Bet.AspNetCore.EvenGrid.Abstractions.Internal.Tests;
-using Bet.AspNetCore.EvenGrid.Abstractions.Models;
+using Bet.AspNetCore.EventGrid.Abstractions.Internal.Tests;
+using Bet.AspNetCore.EventGrid.Abstractions.Models;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;

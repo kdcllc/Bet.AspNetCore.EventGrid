@@ -1,8 +1,8 @@
 # Bet.AspNetCore.EventGrid Webhooks
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ldg53oxk7nrmroo1/branch/master?svg=true)](https://ci.appveyor.com/project/kdcllc/bet-aspnetcore-eventgrid/branch/master)
-[![NuGet](https://img.shields.io/nuget/v/Bet.AspNetCore.EvenGrid.svg)](https://www.nuget.org/packages?q=Bet.AspNetCore.EvenGrid)
-[![MyGet](https://img.shields.io/myget/kdcllc/v/Bet.AspNetCore.EvenGrid.svg?label=myget)](https://www.myget.org/F/kdcllc/api/v2)
+[![NuGet](https://img.shields.io/nuget/v/Bet.AspNetCore.EventGrid.svg)](https://www.nuget.org/packages?q=Bet.AspNetCore.EventGrid)
+[![MyGet](https://img.shields.io/myget/kdcllc/v/Bet.AspNetCore.EventGrid.svg?label=myget)](https://www.myget.org/F/kdcllc/api/v2)
 
 The middleware and viewer for Azure Event Grid.
 
@@ -18,12 +18,12 @@ The middleware and viewer for Azure Event Grid.
 
 ```csharp
 
-      services.AddEvenGridWebhooks()
+      services.AddEventGridWebhooks()
           .AddViewerSignalRHubContext("/hubs/events")
           .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
           .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
 
-      var builder = services.AddEvenGridWebhooks();
+      var builder = services.AddEventGridWebhooks();
       builder.AddViewerSignalRHubContext("/hubs/events");
       builder.AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee");
       builder.AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");

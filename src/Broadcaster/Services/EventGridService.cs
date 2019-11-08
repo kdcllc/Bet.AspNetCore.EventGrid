@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Bet.AspNetCore.EvenGrid.MessageHandlers;
+using Bet.AspNetCore.EventGrid.MessageHandlers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;

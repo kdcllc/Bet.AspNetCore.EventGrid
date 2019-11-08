@@ -34,7 +34,7 @@ namespace Bet.AspNetCore.EventGrid.WebApp
             // OperationService depends on each of the other Operation types.
             services.AddTransient<IOperationService, OperationService>();
 
-            services.AddEvenGridWebhooks()
+            services.AddEventGridWebhooks()
                 .AddViewerSignalRHubContext("/hubs/events")
                 .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
                 .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");

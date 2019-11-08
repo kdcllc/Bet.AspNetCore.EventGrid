@@ -1,4 +1,4 @@
 # Bet.AspNetCore.EventGrid.WebApp
 
-The Sample application that demonstrates usage of `Bet.AspNetCore.EvenGrid`.
+The Sample application that demonstrates usage of `Bet.AspNetCore.EventGrid`.
 

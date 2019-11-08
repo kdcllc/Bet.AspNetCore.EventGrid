@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-using Bet.AspNetCore.EvenGrid.Abstractions;
-using Bet.AspNetCore.EvenGrid.Abstractions.Models;
+using Bet.AspNetCore.EventGrid.Abstractions;
+using Bet.AspNetCore.EventGrid.Abstractions.Models;
 using Bet.AspNetCore.EventGrid.WebApp.Events;
 
 using Microsoft.Extensions.Logging;

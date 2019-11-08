@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bet.AspNetCore.EvenGrid.Abstractions\Bet.AspNetCore.EvenGrid.Abstractions.csproj" />
-    <ProjectReference Include="..\Bet.AspNetCore.EvenGrid.MessageHandlers\Bet.AspNetCore.EvenGrid.MessageHandlers.csproj" />
+    <ProjectReference Include="..\Bet.AspNetCore.EventGrid.Abstractions\Bet.AspNetCore.EventGrid.Abstractions.csproj" />
+    <ProjectReference Include="..\Bet.AspNetCore.EventGrid.MessageHandlers\Bet.AspNetCore.EventGrid.MessageHandlers.csproj" />
   </ItemGroup>
 
 </Project>

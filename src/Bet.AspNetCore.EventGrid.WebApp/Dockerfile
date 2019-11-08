@@ -6,7 +6,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
 COPY ["src/Bet.AspNetCore.EventGrid.WebApp/Bet.AspNetCore.EventGrid.WebApp.csproj", "src/Bet.AspNetCore.EventGrid.WebApp/"]
-COPY ["src/Bet.AspNetCore.EvenGrid/Bet.AspNetCore.EvenGrid.csproj", "src/Bet.AspNetCore.EvenGrid/"]
+COPY ["src/Bet.AspNetCore.EventGrid/Bet.AspNetCore.EventGrid.csproj", "src/Bet.AspNetCore.EventGrid/"]
 COPY ["src/Bet.AspNetCore.EventGrid.Viewer/Bet.AspNetCore.EventGrid.Viewer.csproj", "src/Bet.AspNetCore.EventGrid.Viewer/"]
 RUN dotnet restore "src/Bet.AspNetCore.EventGrid.WebApp/Bet.AspNetCore.EventGrid.WebApp.csproj"
 COPY . .

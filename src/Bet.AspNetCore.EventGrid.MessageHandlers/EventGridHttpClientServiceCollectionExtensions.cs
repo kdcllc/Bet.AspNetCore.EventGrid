@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class BroadcasterServiceCollectionExtensions
+    public static class EventGridHttpClientServiceCollectionExtensions
     {
-        public static IServiceCollection AddEventGridService(this IServiceCollection services)
+        public static IServiceCollection AddEventGridClient(this IServiceCollection services)
         {
             return services;
         }

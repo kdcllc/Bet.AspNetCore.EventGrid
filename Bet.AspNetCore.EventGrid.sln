@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EventGrid.WebApp", "src\Bet.AspNetCore.EventGrid.WebApp\Bet.AspNetCore.EventGrid.WebApp.csproj", "{457D1C0A-A9EA-4169-BDA3-6F4F72D44D89}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EvenGrid", "src\Bet.AspNetCore.EvenGrid\Bet.AspNetCore.EvenGrid.csproj", "{2534FB35-1A0F-4721-932C-C72FE6497D39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EventGrid", "src\Bet.AspNetCore.EventGrid\Bet.AspNetCore.EventGrid.csproj", "{2534FB35-1A0F-4721-932C-C72FE6497D39}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.Func", "src\Bet.AspNetCore.Func\Bet.AspNetCore.Func.csproj", "{54D2B3DC-186B-4831-9887-A280305D9087}"
 EndProject
@@ -41,9 +41,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EventGrid.Un
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "src\Benchmarks\Benchmarks.csproj", "{7692573F-608A-4776-8C35-A17615DD3267}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EvenGrid.MessageHandlers", "src\Bet.AspNetCore.EvenGrid.MessageHandlers\Bet.AspNetCore.EvenGrid.MessageHandlers.csproj", "{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EventGrid.MessageHandlers", "src\Bet.AspNetCore.EventGrid.MessageHandlers\Bet.AspNetCore.EventGrid.MessageHandlers.csproj", "{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bet.AspNetCore.EvenGrid.Abstractions", "src\Bet.AspNetCore.EvenGrid.Abstractions\Bet.AspNetCore.EvenGrid.Abstractions.csproj", "{5DBD7B46-742A-4130-B18B-D198B0B7DD2A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bet.AspNetCore.EventGrid.Abstractions", "src\Bet.AspNetCore.EventGrid.Abstractions\Bet.AspNetCore.EventGrid.Abstractions.csproj", "{5DBD7B46-742A-4130-B18B-D198B0B7DD2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

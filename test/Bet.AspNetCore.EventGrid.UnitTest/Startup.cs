@@ -1,4 +1,4 @@
-﻿using Bet.AspNetCore.EvenGrid.Abstractions.Internal.Tests;
+﻿using Bet.AspNetCore.EventGrid.Abstractions.Internal.Tests;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +9,7 @@ namespace Bet.AspNetCore.EventGrid.UnitTest
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEvenGridWebhooks()
+            services.AddEventGridWebhooks()
               .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee");
         }
 
