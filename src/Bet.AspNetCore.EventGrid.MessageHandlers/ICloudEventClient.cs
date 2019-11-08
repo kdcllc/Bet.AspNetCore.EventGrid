@@ -1,11 +1,15 @@
-﻿using System.Threading;
+﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Bet.AspNetCore.EventGrid.Abstractions.Models;
 
 namespace Bet.AspNetCore.EventGrid.MessageHandlers
 {
-    public interface IEventGridHttpClient
+    /// <summary>
+    /// Azure Event Grid Cloud and Event Grid type of messages.
+    /// </summary>
+    public interface ICloudEventClient
     {
         /// <summary>
         /// Sends EventGrid CloudEvent type of the event.
@@ -24,5 +28,13 @@ namespace Bet.AspNetCore.EventGrid.MessageHandlers
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for a task to complete.</param>
         /// <returns><see cref="Task"/>.</returns>
         Task SendEventAsync<T>(GridEvent<T> data, CancellationToken cancellationToken = default) where T : class, new();
+
+        /// <summary>
+        /// Allows to send content directly.
+        /// </summary>
+        /// <param name="data">The <see cref="StringContent"/> data.</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for a task to complete.</param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> SendAsync(StringContent data, CancellationToken cancellationToken = default);
     }
 }

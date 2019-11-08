@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Broadcaster.Services;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,13 +13,17 @@ namespace Broadcaster
     // https://stackoverflow.com/questions/50120429/what-is-the-key-to-generate-aeg-sas-token
     internal sealed class Program
     {
+        private static IConfiguration _configuration;
+
         internal static async Task<int> Main(string[] args)
         {
             using var host = CreateHostBuilder(args).UseConsoleLifetime().Build();
 
             await host.StartAsync();
             var scope = host.Services.CreateScope();
-            var token = scope.ServiceProvider.GetRequiredService<IHostApplicationLifetime>();
+            var eventService = scope.ServiceProvider.GetRequiredService<EventService>();
+
+            await eventService.SendEventWithEventGridClient(3);
 
             await host.StopAsync();
 
@@ -40,9 +46,10 @@ namespace Broadcaster
                         // helpful to see what was retrieved from all of the configuration providers.
                         if (hostingContext.HostingEnvironment.IsDevelopment())
                         {
-                            // var configuration = configBuilder.Build();
                             configuration.DebugConfigurations();
                         }
+
+                        _configuration = configuration as IConfiguration;
                 })
                 .ConfigureLogging((hostingContext, logger) =>
                 {
@@ -52,7 +59,17 @@ namespace Broadcaster
                 })
                 .ConfigureServices(services =>
                 {
-                    //services.AddModelBuildersCronJobService();
+                    var endpoint = _configuration.GetValue<string>("CloudEventClient:Endpoint");
+                    var key = _configuration.GetValue<string>("CloudEventClient:Key");
+                    services.AddCloudEventClient("BetCloudEventClient", endpoint, key, TimeSpan.FromMinutes(10));
+
+                    services.Configure<EventGridOptions>(options =>
+                    {
+                        options.Endpoint = endpoint;
+                        options.Key = key;
+                    });
+
+                    services.AddSingleton<EventService>();
                 });
         }
     }

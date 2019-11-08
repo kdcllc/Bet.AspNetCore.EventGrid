@@ -10,7 +10,6 @@
     <PackageReference Include="Bet.Extensions.AzureVault" />
     <PackageReference Include="Bet.Extensions.Logging" />
     <PackageReference Include="Microsoft.Azure.EventGrid" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
   </ItemGroup>
 

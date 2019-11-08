@@ -30,9 +30,4 @@
     <ProjectReference Include="..\Bet.AspNetCore.EventGrid.Abstractions\Bet.AspNetCore.EventGrid.Abstractions.csproj" />
     <ProjectReference Include="..\Bet.AspNetCore.EventGrid.Viewer\Bet.AspNetCore.EventGrid.Viewer.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-
 </Project>
