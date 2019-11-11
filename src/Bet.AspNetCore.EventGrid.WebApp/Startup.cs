@@ -7,6 +7,7 @@ using Bet.AspNetCore.EventGrid.WebApp.Services;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -39,7 +40,12 @@ namespace Bet.AspNetCore.EventGrid.WebApp
                 .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
                 .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
 
-            services.AddMvc(r => r.EnableEndpointRouting = false).AddNewtonsoftJson();
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
+
+            services.AddControllers().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,7 +77,11 @@ namespace Bet.AspNetCore.EventGrid.WebApp
 
             app.UseHttpsRedirection();
 
-            app.UseMvc();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+            });
         }
     }
 }

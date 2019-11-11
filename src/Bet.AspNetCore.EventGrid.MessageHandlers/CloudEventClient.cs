@@ -27,7 +27,7 @@ namespace Bet.AspNetCore.EventGrid.MessageHandlers
         /// <inheritdoc />
         public async Task<HttpResponseMessage> SendAsync(StringContent data, CancellationToken cancellationToken = default)
         {
-            using var response = await _httpClient.PostAsync(string.Empty, data, cancellationToken);
+            var response = await _httpClient.PostAsync(string.Empty, data, cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
                 var body = await response.Content.ReadAsStringAsync();

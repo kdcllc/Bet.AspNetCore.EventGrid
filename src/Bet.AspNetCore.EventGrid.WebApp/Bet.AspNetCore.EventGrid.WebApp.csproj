@@ -5,6 +5,9 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <IsPackable>false</IsPackable>
     <UserSecretsId>0b8b5a43-b48b-4825-be6f-080b431b7aea</UserSecretsId>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Docker">
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
@@ -19,5 +22,4 @@
   <ItemGroup>
     <ProjectReference Include="..\Bet.AspNetCore.EventGrid\Bet.AspNetCore.EventGrid.csproj" />
   </ItemGroup>
-
 </Project>

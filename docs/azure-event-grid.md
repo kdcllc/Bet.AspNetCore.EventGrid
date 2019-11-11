@@ -1,4 +1,4 @@
-# Azure Event Grid Topic
+# Azure CLI and Azure Event Grid Topic
 
 
 1. Register Even Grid Resource Provider with the Subscription
@@ -27,14 +27,29 @@ List all locations available
 ```
 
 ```bash
+    # setup
+    $subId= <subscription id>
     $rsGroup= <resource group name>
     $topicName= <topic name>
 
+    # create event grid topic
     az eventgrid topic create --name $topicname -l centralus -g $rsGroup
 
+    # retrieve event grid topic endpoint
     $endpoint=$(az eventgrid topic show --name $topicName -g $rsGroup --query "endpoint" --output tsv)
 
+    # retrieve event grid topic key
     $key=$(az eventgrid topic key list --name $topicName -g $rsGroup --query "key1" --output tsv)
+
+    # url of the web or func
+    $appEndpoint=https://$sitename.azurewebsites.net/api/updates
+
+    #
+    $gridSubName
+    az eventgrid event-subscription create \
+      --source-resource-id "/subscriptions/$subId/resourceGroups/$rsGroup/providers/Microsoft.EventGrid/topics/$topicname"
+      --name $gridSubName
+      --endpoint $appEndpoint
 
 ```
 

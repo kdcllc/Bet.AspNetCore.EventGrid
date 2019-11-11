@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Bet.AspNetCore.EventGrid.Abstractions.Internal.Tests;
+using Bet.AspNetCore.EventGrid.Abstractions.Models;
 using Bet.AspNetCore.EventGrid.MessageHandlers;
 using Bet.AspNetCore.EventGrid.MessageHandlers.Authorization;
 using Microsoft.Azure.EventGrid;
@@ -36,19 +37,35 @@ namespace Broadcaster.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task SendDynamicRequest(int count = 2)
+        public async Task SendCloudEvent()
+        {
+            var data = new EmployeeCreatedEvent
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "CloudEvent Test"
+            };
+
+            var cloudEvent = new CloudEvent<EmployeeCreatedEvent>(data, "Group.Employee");
+
+            await _cloudEventClient.SendEventAsync(cloudEvent, _applicationLifetime.ApplicationStopping);
+        }
+
+        public async Task SendEventWithCloudClient(int count = 2)
         {
             var events = new List<object>();
 
             for (var i = 0; i < count; i++)
             {
+                dynamic data = new JObject();
+                data.Id = $"Item Dynamic #{i}";
+                data.Name = $"Name Dynamic #{i}";
+
                 dynamic payload = new JObject();
                 payload.Id = Guid.NewGuid().ToString();
                 payload.EventType = "Group.Employee";
                 payload.Subject = i;
                 payload.EventTime = DateTimeOffset.Now.ToString("o");
-                payload.Data = new JObject();
-                payload.Data.Id = $"Item #{1}";
+                payload.Data = data;
                 events.Add(payload);
             }
 
@@ -56,7 +73,7 @@ namespace Broadcaster.Services
             _logger.LogInformation($"Sending: {content}");
 
             using var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var result = await _cloudEventClient.SendAsync(httpContent, _applicationLifetime.ApplicationStopping);
+            using var result = await _cloudEventClient.SendAsync(httpContent, _applicationLifetime.ApplicationStopping);
             var resultText = await result.Content.ReadAsStringAsync();
             _logger.LogInformation($"Response: {result.StatusCode} - {resultText}.");
         }

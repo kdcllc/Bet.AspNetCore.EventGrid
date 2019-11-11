@@ -14,6 +14,7 @@ namespace Broadcaster
     internal sealed class Program
     {
         private static IConfiguration _configuration;
+        private static string _type;
 
         internal static async Task<int> Main(string[] args)
         {
@@ -23,7 +24,15 @@ namespace Broadcaster
             var scope = host.Services.CreateScope();
             var eventService = scope.ServiceProvider.GetRequiredService<EventService>();
 
-            await eventService.SendEventWithEventGridClient(3);
+            if (_type == "cloudevent")
+            {
+                await eventService.SendCloudEvent();
+            }
+            else
+            {
+                await eventService.SendEventWithCloudClient(1);
+                await eventService.SendEventWithEventGridClient(1);
+            }
 
             await host.StopAsync();
 
@@ -59,8 +68,16 @@ namespace Broadcaster
                 })
                 .ConfigureServices(services =>
                 {
-                    var endpoint = _configuration.GetValue<string>("CloudEventClient:Endpoint");
-                    var key = _configuration.GetValue<string>("CloudEventClient:Key");
+                    _type = _configuration.GetValue<string>("TopicClientType");
+
+                    var prefix = _type switch
+                    {
+                        "eventgrid" => "TopicClientEventGrid",
+                        "cloudevent" => "TopicClientCloudEvent"
+                    };
+
+                    var endpoint = _configuration.GetValue<string>($"{prefix}:Endpoint");
+                    var key = _configuration.GetValue<string>($"{prefix}:Key");
                     services.AddCloudEventClient("BetCloudEventClient", endpoint, key, TimeSpan.FromMinutes(10));
 
                     services.Configure<EventGridOptions>(options =>

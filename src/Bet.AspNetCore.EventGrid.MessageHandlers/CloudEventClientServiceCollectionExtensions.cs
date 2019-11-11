@@ -10,6 +10,16 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class CloudEventClientServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds Cloud Event Http Client with <see cref="SasAuthorizeDelegatingHandler"/>.
+        /// </summary>
+        /// <param name="services">The DI services.</param>
+        /// <param name="name">The name of the Http Client which allows creations of many clients.</param>
+        /// <param name="endpoint">The Endpoint URL.</param>
+        /// <param name="key">The SAS key.</param>
+        /// <param name="tokenExpiration">The timespan to expire the SAS token.</param>
+        /// <param name="policy">The Polly policies for retries if needed.</param>
+        /// <returns></returns>
         public static IServiceCollection AddCloudEventClient(
             this IServiceCollection services,
             string name,
@@ -25,7 +35,11 @@ namespace Microsoft.Extensions.DependencyInjection
             });
 
             var clientBuilder = services.AddHttpClient<ICloudEventClient, CloudEventClient>(name)
-                                        .AddHttpMessageHandler(sp => sp.GetRequiredService<SasAuthorizeDelegatingHandler>());
+                .ConfigureHttpClient(options =>
+                {
+                    options.BaseAddress = new Uri(endpoint);
+                })
+                .AddHttpMessageHandler(sp => sp.GetRequiredService<SasAuthorizeDelegatingHandler>());
             if (policy != null)
             {
                 clientBuilder.AddPolicyHandler(policy);

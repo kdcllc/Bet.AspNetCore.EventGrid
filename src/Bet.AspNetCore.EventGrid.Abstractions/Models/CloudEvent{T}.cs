@@ -35,7 +35,7 @@ namespace Bet.AspNetCore.EventGrid.Abstractions.Models
         public string EventTypeVersion { get; set; } = "1.0";
 
         [JsonProperty("source")]
-        public string Source { get; set; } = "k8s-cluster";
+        public string Source { get; set; } = "#k8s-cluster";
 
         [JsonProperty("eventTime")]
         public string EventTime { get; set; } = DateTimeOffset.UtcNow.ToString("o");
