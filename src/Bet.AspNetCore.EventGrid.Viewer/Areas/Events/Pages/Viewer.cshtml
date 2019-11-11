@@ -21,9 +21,12 @@
     </p>
     <p style="float: right;">
         <button class="btn btn-primary btn-xs" id="clear-events">
-            <span class="glyphicon glyphicon-trash"></span>
+            Delete
         </button>
     </p>
+</div>
+<div class="tab-pane">
+    <p  id="status">Connection Status</p>
 </div>
 <div style="clear: both;"></div>
 <hr /><br /><br />
@@ -57,6 +60,7 @@
         </td>
     </tr>
 </script>
+
 
 @section scripts {
     <environment include="Development">
@@ -116,15 +120,22 @@
                 .configureLogging(signalR.LogLevel.Debug)
                 .build();
 
-            hubConnection.start().catch(err => console.error(err.toString()));
+            hubConnection.start()
+                .then(function () {
+                    document.getElementById("status").innerText = `Connection: Connected.`;
+                })
+                .catch(err => console.error(err.toString()));
             hubConnection.on('gridupdate', function (id, eventType, subject, eventTime, data, ex) {
                 addEvent(id, eventType, subject, eventTime, data, ex);
             });
+
+
         };
 
         $(document).ready(function () {
             initialize();
         });
+
     </script>
 
 }

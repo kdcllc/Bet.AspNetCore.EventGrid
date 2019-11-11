@@ -1,8 +1,8 @@
-﻿using Bet.AspNetCore.EvenGrid.Webhooks;
+﻿using Bet.AspNetCore.EventGrid.Abstractions.Models;
 
 namespace Bet.AspNetCore.EventGrid.WebApp.Events
 {
-    public class EmployeeCreatedEvent : EventGridWebhookEvent
+    public class EmployeeCreatedEvent : WebhookEvent
     {
         public string Id { get; set; }
 

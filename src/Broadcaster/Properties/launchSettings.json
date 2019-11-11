@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Broadcaster": {
+      "commandName": "Project",
+      "environmentVariables": {
+
+      }
+    }
+  }
+}

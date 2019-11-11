@@ -7,21 +7,20 @@ using Bet.AspNetCore.EventGrid.WebApp.Services;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Bet.AspNetCore.EventGrid.WebApp
 {
     public class Startup
     {
-        private readonly ILogger<Startup> _logger;
-
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _logger = logger;
         }
 
         public IConfiguration Configuration { get; }
@@ -29,6 +28,8 @@ namespace Bet.AspNetCore.EventGrid.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks().AddCheck("simple_check", (token) => new HealthCheckResult(HealthStatus.Healthy));
+
             services.AddTransient<IOperationTransient, Operation>();
             services.AddScoped<IOperationScoped, Operation>();
             services.AddSingleton<IOperationSingleton, Operation>();
@@ -37,22 +38,29 @@ namespace Bet.AspNetCore.EventGrid.WebApp
             // OperationService depends on each of the other Operation types.
             services.AddTransient<IOperationService, OperationService>();
 
-            services.AddEvenGridWebhooks()
-                .AddViewerHubContext("/hubs/grid")
+            services.AddEventGridWebhooks()
+                .AddViewerSignalRHubContext("/hubs/events")
                 .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
                 .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
+
+            services.AddControllers().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            var logger = loggerFactory.CreateLogger<Startup>();
+
             Action<RequestProfilerModel> requestResponseHandler = requestProfilerModel =>
             {
-                _logger.LogInformation(requestProfilerModel.Request);
-                _logger.LogInformation(Environment.NewLine);
-                _logger.LogInformation(requestProfilerModel.Response);
+                logger.LogInformation(requestProfilerModel.Request);
+                logger.LogInformation(Environment.NewLine);
+                logger.LogInformation(requestProfilerModel.Response);
             };
             app.UseMiddleware<RequestResponseLoggingMiddleware>(requestResponseHandler);
 
@@ -66,11 +74,24 @@ namespace Bet.AspNetCore.EventGrid.WebApp
                 app.UseHsts();
             }
 
+            app.UseStaticFiles();
+
             app.UseEventGridWebHooks();
 
-            app.UseHttpsRedirection();
+            var enaledSSL = Configuration.GetValue<bool>("EnabledSSL");
+            if (enaledSSL)
+            {
+                app.UseHttpsRedirection();
+            }
 
-            app.UseMvc();
+            app.UseHealthyHealthCheck();
+            app.UseLivenessHealthCheck();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+            });
         }
     }
 }

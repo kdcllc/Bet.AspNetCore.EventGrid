@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EventGrid.WebApp", "src\Bet.AspNetCore.EventGrid.WebApp\Bet.AspNetCore.EventGrid.WebApp.csproj", "{457D1C0A-A9EA-4169-BDA3-6F4F72D44D89}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EvenGrid", "src\Bet.AspNetCore.EvenGrid\Bet.AspNetCore.EvenGrid.csproj", "{2534FB35-1A0F-4721-932C-C72FE6497D39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EventGrid", "src\Bet.AspNetCore.EventGrid\Bet.AspNetCore.EventGrid.csproj", "{2534FB35-1A0F-4721-932C-C72FE6497D39}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.Func", "src\Bet.AspNetCore.Func\Bet.AspNetCore.Func.csproj", "{54D2B3DC-186B-4831-9887-A280305D9087}"
 EndProject
@@ -35,6 +35,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EventGrid.Vi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{69D38EFB-8E35-4C2A-BF12-329ED290AFF1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0C82CDD9-26A3-43A9-A4BE-13667D165BCB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EventGrid.UnitTest", "test\Bet.AspNetCore.EventGrid.UnitTest\Bet.AspNetCore.EventGrid.UnitTest.csproj", "{997C8442-80DC-4299-A200-9C0CD6F6A0B5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "src\Benchmarks\Benchmarks.csproj", "{7692573F-608A-4776-8C35-A17615DD3267}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.AspNetCore.EventGrid.MessageHandlers", "src\Bet.AspNetCore.EventGrid.MessageHandlers\Bet.AspNetCore.EventGrid.MessageHandlers.csproj", "{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bet.AspNetCore.EventGrid.Abstractions", "src\Bet.AspNetCore.EventGrid.Abstractions\Bet.AspNetCore.EventGrid.Abstractions.csproj", "{5DBD7B46-742A-4130-B18B-D198B0B7DD2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +71,22 @@ Global
 		{F9B50267-D2C3-4BA9-AED6-5AC4839AA021}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9B50267-D2C3-4BA9-AED6-5AC4839AA021}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9B50267-D2C3-4BA9-AED6-5AC4839AA021}.Release|Any CPU.Build.0 = Release|Any CPU
+		{997C8442-80DC-4299-A200-9C0CD6F6A0B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{997C8442-80DC-4299-A200-9C0CD6F6A0B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{997C8442-80DC-4299-A200-9C0CD6F6A0B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{997C8442-80DC-4299-A200-9C0CD6F6A0B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7692573F-608A-4776-8C35-A17615DD3267}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7692573F-608A-4776-8C35-A17615DD3267}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7692573F-608A-4776-8C35-A17615DD3267}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7692573F-608A-4776-8C35-A17615DD3267}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DBD7B46-742A-4130-B18B-D198B0B7DD2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DBD7B46-742A-4130-B18B-D198B0B7DD2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DBD7B46-742A-4130-B18B-D198B0B7DD2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DBD7B46-742A-4130-B18B-D198B0B7DD2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +97,10 @@ Global
 		{54D2B3DC-186B-4831-9887-A280305D9087} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
 		{584E982E-A9DD-4612-95F3-9711497BF50A} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
 		{F9B50267-D2C3-4BA9-AED6-5AC4839AA021} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
+		{997C8442-80DC-4299-A200-9C0CD6F6A0B5} = {0C82CDD9-26A3-43A9-A4BE-13667D165BCB}
+		{7692573F-608A-4776-8C35-A17615DD3267} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
+		{A4AFBEAF-B506-4716-B0BC-200B6D1AFDE6} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
+		{5DBD7B46-742A-4130-B18B-D198B0B7DD2A} = {69D38EFB-8E35-4C2A-BF12-329ED290AFF1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {749D7EF8-C2B7-4314-A7B2-850C63C5C3BC}

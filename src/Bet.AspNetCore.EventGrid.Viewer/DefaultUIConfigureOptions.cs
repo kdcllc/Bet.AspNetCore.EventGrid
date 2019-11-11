@@ -2,15 +2,16 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 
 namespace Bet.AspNetCore.EventGrid.Viewer
 {
-    public class DefaultUIConfigureOptions
-        : IPostConfigureOptions<StaticFileOptions>
+    public class DefaultUIConfigureOptions : IPostConfigureOptions<StaticFileOptions>
     {
+#if NETSTANDARD2_0
         public DefaultUIConfigureOptions(IHostingEnvironment environment)
         {
             Environment = environment;
@@ -18,6 +19,15 @@ namespace Bet.AspNetCore.EventGrid.Viewer
 
         public IHostingEnvironment Environment { get; }
 
+#else
+        public DefaultUIConfigureOptions(IWebHostEnvironment environment)
+        {
+            Environment = environment;
+        }
+
+        public IWebHostEnvironment Environment { get; }
+
+#endif
         public void PostConfigure(string name, StaticFileOptions options)
         {
             name = name ?? throw new ArgumentNullException(nameof(name));
@@ -32,11 +42,19 @@ namespace Bet.AspNetCore.EventGrid.Viewer
 
             options.FileProvider = options.FileProvider ?? Environment.WebRootFileProvider;
 
-            var basePath = "wwwroot";
-
+            const string basePath = "wwwroot";
+#if NETSTANDARD2_0
             // Add our provider
             var filesProvider = new ManifestEmbeddedFileProvider(GetType().Assembly, basePath);
+
             options.FileProvider = new CompositeFileProvider(options.FileProvider, filesProvider);
+#else
+            var filesProvider = new EmbeddedFileProvider(GetType().Assembly, $"{GetType().Assembly.GetName().Name}.{basePath}.Events");
+
+            options.FileProvider = new CompositeFileProvider(options.FileProvider, filesProvider);
+            options.RequestPath = new PathString("/Events");
+
+#endif
         }
     }
 }

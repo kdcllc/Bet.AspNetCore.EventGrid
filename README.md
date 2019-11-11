@@ -1,108 +1,38 @@
-# Bet.AspNetCore.EventGrid solution
+# Bet.AspNetCore.EventGrid Webhooks
+
 [![Build status](https://ci.appveyor.com/api/projects/status/ldg53oxk7nrmroo1/branch/master?svg=true)](https://ci.appveyor.com/project/kdcllc/bet-aspnetcore-eventgrid/branch/master)
-[![NuGet](https://img.shields.io/nuget/v/Bet.AspNetCore.EvenGrid.svg)](https://www.nuget.org/packages?q=Bet.AspNetCore.EvenGrid)
-[![MyGet](https://img.shields.io/myget/kdcllc/v/Bet.AspNetCore.EvenGrid.svg?label=myget)](https://www.myget.org/F/kdcllc/api/v2)
+[![Build Status](https://kdcllc.visualstudio.com/Bet/_apis/build/status/kdcllc.Bet.AspNetCore.EventGrid?branchName=master)](https://kdcllc.visualstudio.com/Bet/_build/latest?definitionId=32&branchName=master)
 
-The middleware and viewer for Azure Event Grid.
+The solution includes the following projects:
 
-## Required Azure resources:
+1. [`Bet.AspNetCore.EventGrid.Abstractions`](./src/Bet.AspNetCore.EventGrid.Abstractions/README.md)
 
-1. Azure Event Grid Topic
-2. Azure Web App or App Functions
+2. [`Bet.AspNetCore.EventGrid`](./src/Bet.AspNetCore.EventGrid/README.md) - the middleware to enable `Webhooks` framework processing.
 
-## Usage of the Azure Web App WebHooks
+3. [`Bet.AspNetCore.EventGrid.Viewer`](./src/Bet.AspNetCore.EventGrid.Viewer/README.md) the event grid debug `Viewer` for custom `Webhooks`.
 
-1. Register Event Handlers
+4. [`Bet.AspNetCore.EventGrid.MessageHandlers`](./src/Bet.AspNetCore.EventGrid.MessageHandlers/README.md) - Custom `SAS Delegating Handler` and `HttpClient`
 
-```csharp
+The sample solutions:
 
-    services.AddEvenGridWebhooks()
-                .AddViewerHubContext()
-                .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
-                .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");
+1. [`Bet.AspNetCore.EventGrid.WebApp`](./src/Bet.AspNetCore.EventGrid.WebApp/README.md) - Web Application that provides support for custom `Webhooks`.
 
-    // enable Azure Grid Event Viewer
-    services.AddEventGridViewer();
-```
+2. [`Bet.AspNetCore.Func`](./src/Bet.AspNetCore.EventGrid.WebApp/README.md) - Azure Function example.
 
-2. Add Middleware
+3. [`Broadcaster`](./src/Broadcaster/README.md) - Worker application to submit events to Azure Event Grid topics.
 
-```csharp
+![event grid schema](./img/eventgrid-schema.jpg)
 
-   app.UseEventGridWebHooks();
+## Required Azure Resources
 
-```
+1. Two Azure Event Grid Topics (Event Grid and Cloud Event Schema)
+2. One Azure Web App or App Functions
+3. One Azure App Web Service
 
-3. WebHook implementation example
+## References
 
-```csharp
+- [Azure CLI and Azure Event Grid Topic](./docs/azure-event-grid.md)
 
-public class CustomerWebhook : IEventGridWebhook<CustomerCreatedEvent>
-    {
-        private readonly ILogger<CustomerWebhook> _logger;
+- [Debugging Webhooks locally with `Ngrok`](./docs/ngrok-debug-locally.md)
 
-        public CustomerWebhook(ILogger<CustomerWebhook> logger)
-        {
-            _logger = logger;
-        }
-
-        public Task<EventGridWebHookResult> ProcessEventAsync(CustomerCreatedEvent @event, CancellationToken cancellationToken = default)
-        {
-            _logger.LogInformation("Executing: {data} ", @event);
-
-            return Task.FromResult<EventGridWebHookResult>(null);
-        }
-    }
-```
-
-4. Azure Event Grid Viewer
-
-To see messages coming in to the middleware.
-
-> https://localhost:5001/events/viewer
-
-## Test Data for Bet.AspNetCore.EventGrid.WebApp project
-
-```json
-[
-  {
-    "topic": "/subscriptions/1234/resourceGroups/test-rs-gp/providers/Microsoft.EventGrid/topics/test-eg-topic",
-    "subject": "Bet-Dream-Func",
-    "id": "ab8d8ef9-b929-46d8-b205-d72113750da1",
-    "eventType": "Group.Employee",
-    "eventTime": "2019-04-28T18:51:17.7994409Z",
-    "data":{
-    	"Id": "12345",
-    	"Name": "hello"
-    },
-    "dataVersion": "2",
-    "metadataVersion": "1"
-  }
-]
-```
-
-## Event Grid Http Message Hander for SAS Token Authentication
-
-```csharp
-
- var client = new HttpClient(new SasAuthorizeMessageHandler(new SasAuthorizeOptions(
-                Endpoint, Key, TimeSpan.FromMinutes(8))) { InnerHandler = new HttpClientHandler() });
-```
-
-## Testing Azure Event Grid Webhooks callbacks
-What if you want to test the round trip communication locally on your machine. [`ngrok`](https://ngrok.com/?source=kdcllc) to the rescue.
-
-1. Install with `npm i -g ngrok`.
-2. Run `Bet.AspNetCore.EventGrid.WebApp` project on port `5001`
-3. Run `ngrok http https://localhost:5001` (to test function locally run `ngrok http -host-header=localhost 7071`)
-![ngrok](./img/ngrok.server.jpg)
-4. Use the randomly generated URL for EventGrid Webhook. Create Event Subscription
-![eventgrid topic](./img/eventgrid-topic.jpg)
-
-
-
-## Reference material
-
-1. [Azure Event Grid Viewer with ASP.NET Core and SignalR](https://madeofstrings.com/2018/03/14/azure-event-grid-viewer-with-asp-net-core-and-signalr/)
-2. [Receive events to an HTTP endpoint](https://docs.microsoft.com/en-us/azure/event-grid/receive-events)
-3. [Locally debugging an Azure Function triggered by Azure Event Grid](https://blogs.msdn.microsoft.com/brandonh/2017/11/30/locally-debugging-an-azure-function-triggered-by-azure-event-grid/)
+- [Kubernetes Local Cluster testing](./k8s/REAMDE.md)

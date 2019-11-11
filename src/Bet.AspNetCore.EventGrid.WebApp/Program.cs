@@ -6,25 +6,32 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Bet.AspNetCore.EventGrid.WebApp
 {
-    public class Program
+    internal sealed class Program
     {
+
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args)
-                        .UseStartup<Startup>()
-                        .ConfigureLogging(log =>
+            return Host.CreateDefaultBuilder(args)
+
+                        .ConfigureWebHostDefaults(webBuilder =>
                         {
-                            log.AddDebug();
-                            log.AddConsole();
+                            webBuilder.ConfigureLogging(log =>
+                            {
+                                log.AddDebug();
+                                log.AddConsole();
+                            });
+                            webBuilder.UseIIS();
+                            webBuilder.UseStartup<Startup>();
                         });
         }
     }

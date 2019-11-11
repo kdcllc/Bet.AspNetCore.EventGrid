@@ -1,97 +1,93 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Net.Http;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
-using Bet.AspNetCore.EvenGrid.MessageHanders;
-using Bet.AspNetCore.EvenGrid.Webhooks;
 
-using Microsoft.Azure.EventGrid;
-using Microsoft.Azure.EventGrid.Models;
+using Broadcaster.Services;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Broadcaster
 {
-    //https://stackoverflow.com/questions/50120429/what-is-the-key-to-generate-aeg-sas-token
-    class Program
+    // https://stackoverflow.com/questions/50120429/what-is-the-key-to-generate-aeg-sas-token
+    internal sealed class Program
     {
-        private static readonly string Key = Environment.GetEnvironmentVariable("EVENT_GRID_KEY");
-        private static readonly string Endpoint = Environment.GetEnvironmentVariable("EVENT_GRID_URL");
+        private static IConfiguration _configuration;
+        private static string _type;
 
-        static  async Task Main(string[] args)
+        internal static async Task<int> Main(string[] args)
         {
-            //await TaskSendEventWithEventGridClient();
+            using var host = CreateHostBuilder(args).UseConsoleLifetime().Build();
 
-             await SendEventWithHttpClient();
-        }
+            await host.StartAsync();
+            var scope = host.Services.CreateScope();
+            var eventService = scope.ServiceProvider.GetRequiredService<EventService>();
 
-        private static async Task SendEventWithHttpClient()
-        {
-            var events = new List<object>();
-
-            for (var i = 0; i < 2; i++)
+            if (_type == "cloudevent")
             {
-                dynamic payload = new JObject();
-                payload.Id = Guid.NewGuid().ToString();
-                payload.EventType = "Group.Employee";
-                payload.Subject = i;
-                payload.EventTime = DateTimeOffset.Now.ToString("o");
-                payload.Data = new JObject();
-                payload.Data.Id = $"Item #{1}";
-                events.Add(payload);
+                await eventService.SendCloudEvent();
+            }
+            else
+            {
+                await eventService.SendEventWithCloudClient(1);
+                await eventService.SendEventWithEventGridClient(1);
             }
 
-            var content = JsonConvert.SerializeObject(events);
-            Console.WriteLine($"Sending: {content}");
+            await host.StopAsync();
 
-            var client = new HttpClient(new SasAuthorizeMessageHandler(new SasAuthorizeOptions(
-                Endpoint, Key, TimeSpan.FromMinutes(8))) { InnerHandler = new HttpClientHandler() });
-
-            var httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var result = await client.PostAsync(Endpoint, httpContent);
-            var resultText = await result.Content.ReadAsStringAsync();
-
-            Console.WriteLine($"Response: {result.StatusCode} - {resultText}.");
+            return 0;
         }
 
-        private static async Task TaskSendEventWithEventGridClient()
+        internal static IHostBuilder CreateHostBuilder(string[] args)
         {
-            var topicHostName = new Uri(Endpoint).Host;
-            var creds = new TopicCredentials(Key);
-
-            var client = new EventGridClient(creds);
-
-            var events = new List<EventGridEvent>();
-
-            for (var i = 0; i < 2; i++)
-            {
-                events.Add(new EventGridEvent
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, configBuilder) =>
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    EventType = "Group.Employee",
-                    Data = new Employee
+                        // based on environment Development = dev; Production = prod prefix in Azure Vault.
+                        var envName = hostingContext.HostingEnvironment.EnvironmentName;
+
+                        var configuration = configBuilder.AddAzureKeyVault(
+                        hostingEnviromentName: envName,
+                        usePrefix: false,
+                        reloadInterval: TimeSpan.FromSeconds(30));
+
+                        // helpful to see what was retrieved from all of the configuration providers.
+                        if (hostingContext.HostingEnvironment.IsDevelopment())
+                        {
+                            configuration.DebugConfigurations();
+                        }
+
+                        _configuration = configuration as IConfiguration;
+                })
+                .ConfigureLogging((hostingContext, logger) =>
+                {
+                    logger.AddConfiguration(hostingContext.Configuration);
+                    logger.AddConsole();
+                    logger.AddDebug();
+                })
+                .ConfigureServices(services =>
+                {
+                    _type = _configuration.GetValue<string>("TopicClientType");
+
+                    var prefix = _type switch
                     {
-                        Id = $"Item #{1}"
-                    },
-                    EventTime = DateTime.Now,
-                    Subject = $"Subject #{1}",
-                    DataVersion = "2.0"
+                        "eventgrid" => "TopicClientEventGrid",
+                        "cloudevent" => "TopicClientCloudEvent"
+                    };
+
+                    var endpoint = _configuration.GetValue<string>($"{prefix}:Endpoint");
+                    var key = _configuration.GetValue<string>($"{prefix}:Key");
+                    services.AddCloudEventClient("BetCloudEventClient", endpoint, key, TimeSpan.FromMinutes(10));
+
+                    services.Configure<EventGridOptions>(options =>
+                    {
+                        options.Endpoint = endpoint;
+                        options.Key = key;
+                    });
+
+                    services.AddSingleton<EventService>();
                 });
-
-                await client.PublishEventsAsync(topicHostName, events);
-
-                Console.Write("Published events to Event Grid topic.");
-            }
-        }
-
-        internal class Employee : EventGridWebhookEvent
-        {
-            public string Id { get; set; }
         }
     }
 }

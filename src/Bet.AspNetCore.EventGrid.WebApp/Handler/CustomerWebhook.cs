@@ -1,14 +1,15 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-using Bet.AspNetCore.EvenGrid.Webhooks;
+using Bet.AspNetCore.EventGrid.Abstractions;
+using Bet.AspNetCore.EventGrid.Abstractions.Models;
 using Bet.AspNetCore.EventGrid.WebApp.Events;
 
 using Microsoft.Extensions.Logging;
 
 namespace Bet.AspNetCore.EventGrid.WebApp.Handler
 {
-    public class CustomerWebhook : IEventGridWebhook<CustomerCreatedEvent>
+    public class CustomerWebhook : IWebhook<CustomerCreatedEvent>
     {
         private readonly ILogger<CustomerWebhook> _logger;
 
@@ -17,11 +18,11 @@ namespace Bet.AspNetCore.EventGrid.WebApp.Handler
             _logger = logger;
         }
 
-        public Task<EventGridWebHookResult> ProcessEventAsync(CustomerCreatedEvent @event, CancellationToken cancellationToken = default)
+        public Task<WebHookResult> ProcessEventAsync(CustomerCreatedEvent @event, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("Executing: {data} ", @event);
 
-            return Task.FromResult<EventGridWebHookResult>(null);
+            return Task.FromResult<WebHookResult>(null);
         }
     }
 }

@@ -1,20 +1,30 @@
 <Project>
+
+  <!-- https://docs.microsoft.com/en-us/nuget/concepts/package-versioning#version-ranges-and-wildcards -->
   <PropertyGroup>
-    <NetCoreCommonVersion>2.2.*</NetCoreCommonVersion>
+    <NetCoreCommonVersion>2.2</NetCoreCommonVersion>
+    <BetCommon>1.5.0</BetCommon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2' Or '$(TargetFramework)' == 'netstandard2.0'">
-    <NetCoreCommonVersion>2.2.*</NetCoreCommonVersion>
+    <NetCoreCommonVersion>2.2</NetCoreCommonVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-    <NetCoreCommonVersion>3.0.0-preview4*</NetCoreCommonVersion>
+    <NetCoreCommonVersion>3.0.0</NetCoreCommonVersion>
   </PropertyGroup>
 
   <ItemGroup Label="NetCore">
+    <PackageReference Update="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Update="Microsoft.AspNetCore.Http" Version="$(NetCoreCommonVersion)" />
     <PackageReference Update="Microsoft.AspNetCore.Mvc" Version="$(NetCoreCommonVersion)" />
     <PackageReference Update="Microsoft.AspNetCore.StaticFiles" Version="$(NetCoreCommonVersion)" />
+    <PackageReference Update="Microsoft.AspNetCore.Mvc.NewtonsoftJson"  Version="$(NetCoreCommonVersion)"/>
+    <PackageReference Update="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="$(NetCoreCommonVersion)" />
+    <PackageReference Update="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(NetCoreCommonVersion)" />
+  </ItemGroup>
+
+  <ItemGroup Label="Extensions">
     <PackageReference Update="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(NetCoreCommonVersion)" />
     <PackageReference Update="Microsoft.Extensions.FileProviders.Embedded" Version="$(NetCoreCommonVersion)" />
     <PackageReference Update="Microsoft.Extensions.Logging.Abstractions" Version="$(NetCoreCommonVersion)" />
@@ -25,6 +35,7 @@
     <PackageReference Update="Microsoft.Extensions.Options.DataAnnotations" Version="$(NetCoreCommonVersion)" />
     <PackageReference Update="Microsoft.Extensions.Primitives" Version="$(NetCoreCommonVersion)" />
     <PackageReference Update="Microsoft.Extensions.Http.Polly" Version="$(NetCoreCommonVersion)" />
+    <PackageReference Update="Microsoft.Extensions.Hosting" Version="$(NetCoreCommonVersion)" />
   </ItemGroup>
 
   <ItemGroup Label="Azure Key Vault">
@@ -34,10 +45,11 @@
   </ItemGroup>
 
   <ItemGroup Label="Unit Tests">
-    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Update="Moq" Version="4.13.0" />
     <PackageReference Update="xunit" Version="2.4.1" />
     <PackageReference Update="xunit.runner.visualstudio" Version="2.4.1" />
+    <PackageReference Update="coverlet.collector" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup Label="Shared">
@@ -46,7 +58,17 @@
     <PackageReference Update="Microsoft.Azure.EventGrid" Version="3.2.0" />
   </ItemGroup>
 
+  <ItemGroup Label="Bet">
+    <PackageReference Update="Bet.Extensions.AzureVault" Version="$(BetCommon)" />
+    <PackageReference Update="Bet.Extensions.Logging" Version="$(BetCommon)" />
+    <PackageReference Update="Bet.AspNetCore.HealthChecks" Version="$(BetCommon)" />
+  </ItemGroup>
+
+  <ItemGroup Label="Analyzers">
+    <PackageReference Include="Bet.CodeAnalyzers" Version="1.0.7" PrivateAssets="All" />
+  </ItemGroup>
+
   <ItemGroup Label="SourceLink">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19554-01" PrivateAssets="All" />
   </ItemGroup>
 </Project>

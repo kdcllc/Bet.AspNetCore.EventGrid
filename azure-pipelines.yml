@@ -1,0 +1,78 @@
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/targets/webapp?view=azure-devops&tabs=yaml
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops
+
+trigger:
+- master
+
+pool:
+  # https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops#use-a-microsoft-hosted-agent
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- script: |
+    dotnet restore
+    dotnet build --configuration Release
+
+# - task: DotNetCoreCLI@2
+#   displayName: Restore Solution
+#   inputs:
+#     command: restore
+#     projects: '*.sln'
+
+# - task: DotNetCoreCLI@2
+#   displayName: Build Solution
+#   inputs:
+#     command: build
+#     projects: '*.sln'
+#     arguments: '--configuration $(BuildConfiguration) --no-restore'
+
+- task: DotNetCoreCLI@2
+  displayName: Publish WebApp
+  inputs:
+    command: publish
+    projects: '**/Bet.AspNetCore.EventGrid.WebApp/**/*.csproj'
+    publishWebProjects: false
+    #arguments: '-f netcoreapp3.0 -r win-x86 --self-contained true /p:PublishTrimmed=true --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
+    arguments: '-f netcoreapp3.0 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
+    modifyOutputPath: true
+    zipAfterPublish: true
+
+# https://github.com/microsoft/azure-pipelines-tasks/issues/11444#issuecomment-535671385 (Issue with the deployment)
+- task: AzureWebApp@1
+  displayName: Deploy WebApp
+  inputs:
+    azureSubscription: 'DreamSpark'
+    appType: 'webApp'
+    appName: 'bet-eventgrid'
+    package: '$(Build.ArtifactStagingDirectory)/app/**/*.zip'
+    deploymentMethod: 'auto'
+
+- task: DotNetCoreCLI@2
+  displayName: Publish Func
+  inputs:
+    command: build
+    projects: '**/Bet.AspNetCore.Func/**/*.csproj'
+    publishWebProjects: false
+    arguments: '--configuration $(BuildConfiguration) --output --output publish_func'
+    zipAfterPublish: true
+
+- task: ArchiveFiles@2
+  displayName: "Archive Func files"
+  inputs:
+    rootFolderOrFile: "$(System.DefaultWorkingDirectory)/publish_func"
+    includeRootFolder: false
+    archiveFile: "$(Build.ArtifactStagingDirectory)/func/build$(Build.BuildId).zip"
+
+# https://docs.microsoft.com/en-us/azure/azure-functions/functions-how-to-azure-devops
+- task: AzureFunctionApp@1
+  displayName: Deploy Func
+  inputs:
+    azureSubscription: 'DreamSpark'
+    appType: 'functionApp'
+    appName: 'bet-dream-func'
+    package: '$(Build.ArtifactStagingDirectory)/func/**/*.zip'
+    deploymentMethod: 'auto'
