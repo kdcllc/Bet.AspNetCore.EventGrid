@@ -30,8 +30,6 @@ namespace Bet.AspNetCore.EventGrid.WebApp
                                 log.AddDebug();
                                 log.AddConsole();
                             });
-
-                            // webBuilder.UseStaticWebAssets();
                             webBuilder.UseIIS();
                             webBuilder.UseStartup<Startup>();
                         });

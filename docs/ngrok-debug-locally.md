@@ -13,6 +13,10 @@ What if you want to test the round trip communication locally on your machine. [
 ![eventgrid topic](../img/eventgrid-topic.jpg)
 
 
+## Kubernetes
+
+- [Kubernetes Local Cluster testing](../k8s/REAMDE.md)
+
 ## Reference
 
  - [Locally debugging an Azure Function triggered by Azure Event Grid](https://blogs.msdn.microsoft.com/brandonh/2017/11/30/locally-debugging-an-azure-function-triggered-by-azure-event-grid/)

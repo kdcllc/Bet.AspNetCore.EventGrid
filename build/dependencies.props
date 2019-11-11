@@ -1,11 +1,13 @@
 <Project>
+
+  <!-- https://docs.microsoft.com/en-us/nuget/concepts/package-versioning#version-ranges-and-wildcards -->
   <PropertyGroup>
-    <NetCoreCommonVersion>2.2.*</NetCoreCommonVersion>
+    <NetCoreCommonVersion>2.2</NetCoreCommonVersion>
     <BetCommon>1.5.0</BetCommon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2' Or '$(TargetFramework)' == 'netstandard2.0'">
-    <NetCoreCommonVersion>2.2.*</NetCoreCommonVersion>
+    <NetCoreCommonVersion>2.2</NetCoreCommonVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
@@ -59,6 +61,7 @@
   <ItemGroup Label="Bet">
     <PackageReference Update="Bet.Extensions.AzureVault" Version="$(BetCommon)" />
     <PackageReference Update="Bet.Extensions.Logging" Version="$(BetCommon)" />
+    <PackageReference Update="Bet.AspNetCore.HealthChecks" Version="$(BetCommon)" />
   </ItemGroup>
 
   <ItemGroup Label="Analyzers">

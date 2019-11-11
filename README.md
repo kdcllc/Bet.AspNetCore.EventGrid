@@ -21,6 +21,8 @@ The sample solutions:
 
 3. [`Broadcaster`](./src/Broadcaster/README.md) - Worker application to submit events to Azure Event Grid topics.
 
+![event grid schema](./img/eventgrid-schema.jpg)
+
 ## Required Azure Resources
 
 1. Two Azure Event Grid Topics (Event Grid and Cloud Event Schema)
@@ -32,3 +34,5 @@ The sample solutions:
 - [Azure CLI and Azure Event Grid Topic](./docs/azure-event-grid.md)
 
 - [Debugging Webhooks locally with `Ngrok`](./docs/ngrok-debug-locally.md)
+
+- [Kubernetes Local Cluster testing](./k8s/REAMDE.md)

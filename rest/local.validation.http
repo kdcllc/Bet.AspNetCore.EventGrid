@@ -1,6 +1,7 @@
 
 # tests codes for local validation request that event grid sends to the webhookd
-POST https://{{host}}/webhooks
+#POST https://{{host}}/webhooks
+POST http://localhost:5200/webhooks
 Content-Type: {{contentType}}
 aeg-event-type: SubscriptionValidation
 

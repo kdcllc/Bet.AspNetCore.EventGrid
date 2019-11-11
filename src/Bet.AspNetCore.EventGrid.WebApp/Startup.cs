@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -27,6 +28,8 @@ namespace Bet.AspNetCore.EventGrid.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks().AddCheck("simple_check", (token) => new HealthCheckResult(HealthStatus.Healthy));
+
             services.AddTransient<IOperationTransient, Operation>();
             services.AddScoped<IOperationScoped, Operation>();
             services.AddSingleton<IOperationSingleton, Operation>();
@@ -75,7 +78,14 @@ namespace Bet.AspNetCore.EventGrid.WebApp
 
             app.UseEventGridWebHooks();
 
-            app.UseHttpsRedirection();
+            var enaledSSL = Configuration.GetValue<bool>("EnabledSSL");
+            if (enaledSSL)
+            {
+                app.UseHttpsRedirection();
+            }
+
+            app.UseHealthyHealthCheck();
+            app.UseLivenessHealthCheck();
 
             app.UseEndpoints(endpoints =>
             {
