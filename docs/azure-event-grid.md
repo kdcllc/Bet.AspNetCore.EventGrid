@@ -26,6 +26,25 @@ List all locations available
     az configure --defaults location=<location>
 ```
 
+To overcome issue with Azure UI endpoint creation
+
+```
+Deployment has failed with the following error: The specified EventDeliverySchema value "CloudEventSchemaV1_0" cannot be used in combination with the topic's input schema of CloudEventV01Schema.
+```
+
+Use the following script
+
+```ps2
+$subId="<subscription id>"
+$appEndpoint="https://97e617d2.ngrok.io/web-hooks"
+$gridSubName="localhost-test"
+$rsGroup="<resource group name>"
+$topicname="<topic name>"
+
+az eventgrid event-subscription create  --source-resource-id "/subscriptions/$subId/resourceGroups/$rsGroup/providers/Microsoft.EventGrid/topics/$topicname" --name $gridSubName --endpoint $appEndpoint
+
+```
+
 ```bash
     # setup
     $subId= <subscription id>
