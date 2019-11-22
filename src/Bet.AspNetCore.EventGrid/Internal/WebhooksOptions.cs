@@ -23,5 +23,7 @@ namespace Bet.AspNetCore.EventGrid.Internal
         public bool ViewerHubContextEnabled { get; set; } = false;
 
         public string ViewerHubContextRoute { get; set; } = string.Empty;
+
+        public string Diagnostics { get; set; } = string.Empty;
     }
 }
