@@ -2,7 +2,7 @@
 
 using Bet.AspNetCore.EventGrid.Abstractions;
 using Bet.AspNetCore.EventGrid.Abstractions.Models;
-
+using Bet.AspNetCore.EventGrid.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bet.AspNetCore.EventGrid.Internal
@@ -39,6 +39,11 @@ namespace Bet.AspNetCore.EventGrid.Internal
             return this;
         }
 
+        /// <summary>
+        /// Adds SignalR Viewer.
+        /// </summary>
+        /// <param name="httpRoute"></param>
+        /// <returns></returns>
         public IWebhooksBuilder AddViewerSignalRHubContext(string httpRoute = "/hubs/gridevents")
         {
             Services.AddViewerSignalR(httpRoute);
@@ -48,6 +53,23 @@ namespace Bet.AspNetCore.EventGrid.Internal
                 options.ViewerHubContextEnabled = true;
                 options.ViewerHubContextRoute = httpRoute;
             });
+
+            return this;
+        }
+
+        /// <summary>
+        /// Adds Diagnostics.
+        /// </summary>
+        /// <param name="diagnosticsPath"></param>
+        /// <returns></returns>
+        public IWebhooksBuilder AddDiagnostics(string diagnosticsPath = "/check")
+        {
+            Services.Configure<WebhooksOptions>(options =>
+            {
+                options.Diagnostics = diagnosticsPath;
+            });
+
+            Services.AddSingleton<IProcessReport, ProcessReport>();
 
             return this;
         }

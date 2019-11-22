@@ -37,6 +37,7 @@ namespace Bet.AspNetCore.EventGrid.WebApp
             services.AddTransient<IOperationService, OperationService>();
 
             services.AddEventGridWebhooks()
+                .AddDiagnostics("/check")
                 .AddViewerSignalRHubContext("/hubs/events")
                 .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee")
                 .AddWebhook<CustomerWebhook, CustomerCreatedEvent>("Group.Employee");

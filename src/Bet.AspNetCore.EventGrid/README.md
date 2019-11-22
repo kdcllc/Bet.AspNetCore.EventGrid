@@ -21,6 +21,7 @@ This is a custom middleware that provides with ability to add message processing
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddEventGridWebhooks()
+          .AddDiagnostics("/check") // adds count middleware
           .AddWebhook<EmployeeWebhook, EmployeeCreatedEvent>("Group.Employee");
 
       // or
