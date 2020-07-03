@@ -54,7 +54,7 @@
 
   <ItemGroup Label="Shared">
     <PackageReference Update="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Update="Microsoft.NET.Sdk.Functions" Version="1.0.29" />
+    <PackageReference Update="Microsoft.NET.Sdk.Functions" Version="3.0.8" />
     <PackageReference Update="Microsoft.Azure.EventGrid" Version="3.2.0" />
     <PackageReference Update="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
