@@ -3,7 +3,7 @@
   <!-- https://docs.microsoft.com/en-us/nuget/concepts/package-versioning#version-ranges-and-wildcards -->
   <PropertyGroup>
     <NetCoreCommonVersion>2.2</NetCoreCommonVersion>
-    <BetCommon>2.0.2</BetCommon>
+    <BetCommon>3.1.7</BetCommon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2' Or '$(TargetFramework)' == 'netstandard2.0'">
